@@ -43,3 +43,5 @@ Nach jeder wesentlichen Änderung und zum Aufgabenabschluss die Kontextdokumente
 ## Erstveröffentlichung 0.1.7
 
 Der Nutzer hat den Upload des letzten fertigen IPKs ausdrücklich beauftragt. Für den ersten öffentlichen Upload werden ausschließlich die Archivmetadaten neutralisiert; installierbare Dateien und Steuerdaten bleiben bytegleich mit dem bisherigen lokalen 0.1.7-Paket. Der vollständige Paketquellcode und der bereinigte Paketbau gehören zum Release-Tag. Die neue Funktionsversion 0.1.8 hat keine Veröffentlichungsfreigabe.
+
+Quellcode, Tag und bereinigtes 0.1.7-IPK sind auf GitHub veröffentlicht. Das neue Detailpaket wird erst nach Nutzertest und Freigabe veröffentlicht.

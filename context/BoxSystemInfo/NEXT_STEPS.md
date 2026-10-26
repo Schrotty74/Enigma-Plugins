@@ -2,7 +2,7 @@
 
 ## Ausgangspunkt
 
-Der stabile 0.1.7-Stand ist aus Paket und vollständigem Quellenbestand übernommen. Datenschutzprüfung und bytegleicher Vergleich der installierbaren Dateien sind für den ersten Upload vorgesehen. Der Release-Tag ist `boxsysteminfo-v0.1.7`. Keine 0.1.7-Dateien durch den geplanten 0.1.8-Stand ersetzen.
+Der stabile 0.1.7-Stand ist aus Paket und vollständigem Quellenbestand übernommen. Datenschutzprüfung und bytegleicher Vergleich der installierbaren Dateien sind abgeschlossen. Quellcode, Tag `boxsysteminfo-v0.1.7` und bereinigtes IPK sind veröffentlicht. Keine 0.1.7-Dateien durch den geplanten 0.1.8-Stand ersetzen.
 
 ## Entwicklung 0.1.8
 
