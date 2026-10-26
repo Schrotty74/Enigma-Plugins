@@ -2,6 +2,8 @@
 
 [English](README.md) · [Deutsch](README.de.md) · [Changelog](CHANGELOG.md) · [Build instructions](BUILDING.md)
 
+![Box Systeminfo](src/usr/lib/enigma2/python/Plugins/Extensions/BoxSystemInfo/icon.png)
+
 Box Systeminfo displays receiver, storage, temperature, and image information on an Enigma2 screen. The author is Schrotty74. It targets open Enigma2 images such as OpenPLi and OpenATV on ARMv7 receivers. Version 0.1.9 was tested on the user's receiver; the user confirmed that the data is now displayed and approved publication of the IPK.
 
 ## Screen and controls

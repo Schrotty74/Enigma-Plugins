@@ -14,3 +14,7 @@
 ## Sprachen
 
 `README.md` ist die englische Standardfassung, `README.de.md` die deutsche Fassung. Beide müssen sich gegenseitig verlinken und denselben fachlichen Stand beschreiben, sowohl im Repository-Stamm als auch pro Plugin. Changelogs ausschließlich auf Englisch in `CHANGELOG.md` führen; deutsche READMEs verlinken darauf. Beide Sprachfassungen bei Funktionsänderungen gemeinsam aktualisieren.
+
+## Plugin-Seiten
+
+Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.

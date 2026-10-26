@@ -11,3 +11,7 @@ Die allgemeine Übersicht bleibt der Startbildschirm. Gelb öffnet zusätzliche 
 Halte alle Quellen, Ressourcen, Build-Skripte, eingebetteten Programme, Originalquellen und Lizenzen in Git. Projektpfade relativ oder zur Laufzeit ermitteln. Box-Zugänge lokal neu bereitstellen; keine privaten Daten, lokalen Benutzerpfade oder Receiver-Screenshots veröffentlichen. Vor jedem Upload die konkreten Git-Dateien und Artefakte samt Archivmetadaten mit `tools/audit_upload.py` und inhaltlich prüfen.
 
 README.md ist Englisch, README.de.md Deutsch; beide verlinken sich gegenseitig. Changelogs bleiben ausschließlich Englisch. Keine globalen Installationen oder zusätzlichen Test-Apps ohne Auftrag, keine ungeprüften Kompatibilitäts- oder Nachbaubarkeitsversprechen. Kontextdateien nach wesentlichen Änderungen und zum Abschluss aktualisieren.
+
+## README-Aufteilung
+
+Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.

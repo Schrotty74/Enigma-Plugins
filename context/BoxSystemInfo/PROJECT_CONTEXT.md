@@ -30,3 +30,7 @@ smartctl wird mit Zig 0.14.1 für `arm-linux-musleabihf`, CPU `generic+v7a+vfp3d
 ## Verbindliche Pflege
 
 Keine privaten Daten oder persönlichen festen Pfade in Git oder Upload-Artefakten. Jede Upload-Auswahl einschließlich Archive/Metadaten prüfen. Englisch ist der README-Standard, Deutsch eine gegenseitig verlinkte Fassung; Changelogs nur Englisch. Alle vier Kontextdateien nach wesentlichen Änderungen und zum Abschluss aktualisieren.
+
+## README-Aufteilung
+
+Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.

@@ -8,3 +8,7 @@ Für 0.1.9 sind Implementierung, 48 technische Tests, Receiver-Installation und 
 - Jede spätere IPK erst nach persönlichem Test und ausdrücklicher Freigabe des Nutzers hochladen. Vor jedem Push und Release-Upload Datenschutzprüfung der konkreten Auswahl ausführen.
 
 Bisherige Releases nicht überschreiben oder löschen. Keine zusätzlichen Funktionen oder breiten Prüfungen ohne Auftrag ergänzen.
+
+## README-Aufteilung
+
+Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.

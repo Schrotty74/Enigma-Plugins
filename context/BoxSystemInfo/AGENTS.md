@@ -11,3 +11,7 @@ Diese Regeln gelten für `plugins/BoxSystemInfo/` und den zugehörigen Kontextor
 - Nach wesentlichen Änderungen und zum Aufgabenende alle vier Kontextdateien aktualisieren. Offene Arbeit in `NEXT_STEPS.md` festhalten; erledigte Punkte nicht als offen stehen lassen.
 - Builds nach `plugins/BoxSystemInfo/BUILDING.md`. Keine zusätzlichen Test-Apps oder globalen Umgebungsänderungen ohne Auftrag. Temporäres Material nach Verwendung aufräumen.
 - Keine ungeprüfte Kompatibilität oder byte-identische Nachbaubarkeit behaupten. OpenATV und Python 2 sind weiterhin nicht praktisch geprüft.
+
+## README-Aufteilung
+
+Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.
