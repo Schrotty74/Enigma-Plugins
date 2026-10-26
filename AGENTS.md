@@ -10,3 +10,7 @@
 - Projekt- und Buildpfade aus dem Checkout bzw. zur Laufzeit ermitteln. Keine persönlichen absoluten Pfade oder Box-Adressen fest eintragen. Notwendige Linux-Systempfade sind dokumentierte Schnittstellen und keine Projektpfade.
 - Keine zusätzlichen Test-Apps oder globalen Umgebungsänderungen ohne ausdrücklichen Auftrag. Bestehende Dateien nicht nebenbei bereinigen. Eigene temporäre Dateien nach Verwendung entfernen.
 - Aktuelles Plugin: [BoxSystemInfo-Regeln](context/BoxSystemInfo/AGENTS.md), [Bauanleitung](plugins/BoxSystemInfo/BUILDING.md).
+
+## Sprachen
+
+`README.md` ist die englische Standardfassung, `README.de.md` die deutsche Fassung. Beide müssen sich gegenseitig verlinken und denselben fachlichen Stand beschreiben, sowohl im Repository-Stamm als auch pro Plugin. Changelogs ausschließlich auf Englisch in `CHANGELOG.md` führen; deutsche READMEs verlinken darauf. Beide Sprachfassungen bei Funktionsänderungen gemeinsam aktualisieren.

@@ -4,7 +4,7 @@ ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 WORK=$(mktemp -d "$ROOT/.build.XXXXXX")
 trap 'rm -rf "$WORK"' EXIT HUP INT TERM
 DIST="$ROOT/dist"
-VERSION="0.1.7"
+VERSION="0.1.9"
 mkdir -p "$DIST"
 python3 - "$ROOT" "$WORK" "$DIST" "$VERSION" <<'PY'
 import gzip

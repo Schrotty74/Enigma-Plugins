@@ -16,7 +16,7 @@ SOURCE = Path(__file__).resolve().parents[1] / 'src/usr/lib/enigma2/python/Plugi
 TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 # Load the actual helpers without requiring an Enigma2 installation on the host.
 NODES = [n for n in TREE.body if isinstance(n, ast.FunctionDef) or
-         isinstance(n, ast.ClassDef) and n.name == 'DriveTemperatureQuery']
+         isinstance(n, ast.ClassDef) and n.name in ('DriveTemperatureQuery', 'StorageQuery')]
 M = types.ModuleType('plugin_helpers')
 M.__dict__.update(os=os, glob=glob, re=re, time=time, json=json, __file__=str(SOURCE))
 exec(compile(ast.Module(body=NODES, type_ignores=[]), str(SOURCE), 'exec'), M.__dict__)
@@ -133,7 +133,7 @@ class AsyncTests(unittest.TestCase):
         self.query.start()
         self.assertEqual(self.values, [])
         c = Container.instances[-1]
-        self.assertEqual(c.args, ('/usr/sbin/smartctl', '/usr/sbin/smartctl', '-n', 'standby,3', '-A', '/dev/sda'))
+        self.assertEqual(c.args, ('/usr/sbin/smartctl', '/usr/sbin/smartctl', '-n', 'standby,3', '-i', '-H', '-A', '/dev/sda'))
         c.dataAvail[0](ATA[:55].encode())
         c.emit(ATA[55:].encode(), 8)  # health warning does not invalidate temperature
         self.assertEqual(self.values, ['35.0°C (sda, SMART)'])

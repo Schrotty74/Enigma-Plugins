@@ -1,47 +1,32 @@
 # BoxSystemInfo: Projektkontext
 
-## Zweck
+## Projekt
 
-BoxSystemInfo ist ein Enigma2-Plugin für Systeminformationen auf Receivern. Die öffentliche Zuordnung lautet Autor `Schrotty74`, Repository `Schrotty74/Enigma-Plugins`.
+Enigma2-Systeminfo-Plugin von Schrotty74 im Repository `Schrotty74/Enigma-Plugins`. Vollständiger Plugin-Bestand unter `plugins/BoxSystemInfo/`; dieser Kontext liegt getrennt unter `context/BoxSystemInfo/`.
 
-## Verlässlicher Stand
+## Stand 0.1.9
 
-- Stabiler Ausgangspunkt: Version 0.1.7 auf `main`.
-- Release-Tag: `boxsysteminfo-v0.1.7`.
-- Die genaue 0.1.7-Quelle stammt aus dem zugehörigen installierten Paket und dem vorhandenen vollständigen Quellenbestand. Dieser Stand ist die Basis für weitere Arbeiten.
-- Sechs beauftragte Änderungen für 0.1.8 werden anschließend auf `development/boxsysteminfo-0.1.8` umgesetzt.
-- Ein 0.1.8-IPK darf erst nach eigenem Test durch den Nutzer und dessen ausdrücklicher Freigabe veröffentlicht werden. Tests durch einen Agenten genügen dafür nicht.
+- Die allgemeine Kartenübersicht ist weiterhin der Startbildschirm: Temperaturen, RAM, Root-Speicher, Receiver und Image-Daten.
+- Gelb öffnet Details zu Aufnahmespeicher/SSD, CPU, Netzwerk und Tuner/Aufnahmen. Hoch/Runter bzw. Gelb/Blau blättert, Exit kehrt zur Übersicht zurück. Links/Rechts bzw. Grün wechselt das gespeicherte Theme.
+- Aufnahmespeicher zeigt Kapazität, belegten/freien Platz und Belegung. Bei fehlendem konfiguriertem Pfad wird ein eindeutig eingehängter Enigma2-Datenträger verwendet; mehrere unklare Datenträger werden nicht geraten.
+- SSD-Details: Modell, SMART-Gesamtstatus und Betriebsstunden, soweit verfügbar. Nur lesende Abfragen mit Zeitlimit, keine SMART-Tests oder Laufwerkseinstellungen.
+- CPU-Kerne und Takt, Systemlast-Mittelwerte, Netzwerk-Verbindung/Linkgeschwindigkeit sowie erkannte Tuner-Nutzung und Aufnahmezähler ergänzen die Anzeige. FBC kann virtuelle Frontends melden; nicht erkannte Aktivität bedeutet nicht automatisch frei.
+- Hinweisfarben: SoC ab 80 °C, Laufwerk ab 60 °C, Speicherbelegung ab 90 % sowie SMART-Fehler und nur lesbarer Aufnahmespeicher. Das sind Hinweisschwellen, keine Herstellergrenzwerte.
 
-## Lieferumfang im Plugin-Verzeichnis
+## Tests und Freigabe
 
-`plugins/BoxSystemInfo/` muss als eigenständiger, vollständiger Plugin-Bestand im Git-Repository liegen. Dazu gehören:
+48 Regressionstests, Python-3.12-Syntax, Shell-Syntax und Paketbau sind geprüft. Die installierten geänderten Quelldateien stimmen mit dem Repository überein. Das abschließende 0.1.9-IPK ist bytegleich mit dem auf dem Receiver installierten Testpaket.
 
-- installierbarer Plugin-Quellcode und Runtime-Dateien, einschließlich des vorhandenen Runtime-Binaries;
-- alle Build-Skripte und Hilfsdateien;
-- die Originalquellen von Smartmontools 7.4;
-- die zugehörigen Lizenztexte unter `src/usr/share/doc/boxsysteminfo/smartmontools/`.
+Der Nutzer hat bestätigt, dass die fehlenden Speicherwerte in 0.1.9 angezeigt werden, und den IPK-Upload ausdrücklich beauftragt. Für 0.1.9 liegt damit die persönliche Testbestätigung und Freigabe vor. Jede spätere IPK-Version benötigt eine neue Bestätigung und Freigabe.
 
-Die Smartmontools-7.4-Quelldatei hat den erwarteten SHA-256-Wert:
+0.1.7 ist als früheres Release unter `boxsysteminfo-v0.1.7` erhalten. Die Erweiterungsserie wurde auf `development/boxsysteminfo-0.1.8` entwickelt; aktueller Release-Tag ist `boxsysteminfo-v0.1.9`. Den tatsächlichen Branch-/Tag-/Release-Stand bei Fortsetzung mit Git/GitHub prüfen.
 
-`e9a61f641ff96ca95319edfb17948cd297d0cd3342736b2c49c99d4716fb993d`
+## Nachbauen und Grenzen
 
-## Build-Ziele und Grenzen
+Originalquelle smartmontools 7.4, statisches ARMv7-Programm, Lizenzen und Build-Skripte sind vollständig versioniert. Quelle unter `src/usr/share/doc/boxsysteminfo/smartmontools/` hat SHA256 `e9a61f641ff96ca95319edfb17948cd297d0cd3342736b2c49c99d4716fb993d`.
 
-- Das Runtime-Binary wird mit Zig 0.14.1 für `arm-linux-musleabihf` erstellt; die Skriptkonfiguration zielt auf `generic+v7a+vfp3d16`.
-- Ziel sind ARMv7-Enigma2-Images, insbesondere OpenPLi und OpenATV. Bisher ist nur ein Zielsystem verifiziert.
-- Es gibt keinen Nachweis für byte-identische Builds und keinen abgeschlossenen End-to-End-Build auf einem frischen Mac.
-- Dokumentation muss genau zwischen Skriptkonfiguration, tatsächlich geprüften Systemen und noch ungeprüften Plattformen unterscheiden.
+smartctl wird mit Zig 0.14.1 für `arm-linux-musleabihf`, CPU `generic+v7a+vfp3d16`, gebaut. Bauanleitung: `plugins/BoxSystemInfo/BUILDING.md`. Praktisch geprüft: OpenPLi auf Vu+ Uno 4K SE. OpenATV, weitere Receiver und Python 2 sind ungeprüft. Ein frischer Mac-End-to-End-Build und byte-identische Neubauten des smartctl-Programms sind nicht nachgewiesen.
 
-## Datenschutz und Portabilität
+## Verbindliche Pflege
 
-Keine lokalen absoluten Pfade, privaten IP-Adressen, Passwörter, Benutzernamen, MAC-Adressen, Seriennummern oder Screenshots in Git aufnehmen. Dokumentation und Build-Anleitungen verwenden relative Repository-Pfade. Keine Werkzeuge systemweit installieren und keine globale Entwicklungsumgebung ändern.
-
-## Kontextpflege
-
-Nach jeder wesentlichen Änderung und zum Aufgabenabschluss die Kontextdokumente aktualisieren. `NEXT_STEPS.md` enthält offene Arbeit; abgeschlossene Punkte daraus entfernen oder als erledigt kennzeichnen.
-
-## Erstveröffentlichung 0.1.7
-
-Der Nutzer hat den Upload des letzten fertigen IPKs ausdrücklich beauftragt. Für den ersten öffentlichen Upload werden ausschließlich die Archivmetadaten neutralisiert; installierbare Dateien und Steuerdaten bleiben bytegleich mit dem bisherigen lokalen 0.1.7-Paket. Der vollständige Paketquellcode und der bereinigte Paketbau gehören zum Release-Tag. Die neue Funktionsversion 0.1.8 hat keine Veröffentlichungsfreigabe.
-
-Quellcode, Tag und bereinigtes 0.1.7-IPK sind auf GitHub veröffentlicht. Das neue Detailpaket wird erst nach Nutzertest und Freigabe veröffentlicht.
+Keine privaten Daten oder persönlichen festen Pfade in Git oder Upload-Artefakten. Jede Upload-Auswahl einschließlich Archive/Metadaten prüfen. Englisch ist der README-Standard, Deutsch eine gegenseitig verlinkte Fassung; Changelogs nur Englisch. Alle vier Kontextdateien nach wesentlichen Änderungen und zum Abschluss aktualisieren.

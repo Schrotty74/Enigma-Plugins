@@ -59,7 +59,7 @@ Build-Ausgaben vor dem Commit prüfen. Das Git-Repository soll Quellcode, Skript
 
 OpenPLi und OpenATV sind Ziel-Images; bisher ist nur ein Receiver-/Image-Zielsystem verifiziert. Kein abgeschlossener End-to-End-Build auf einem frischen Mac ist belegt. Aus einem erfolgreichen lokalen Build folgt keine byte-identische Reproduzierbarkeit.
 
-Eine 0.1.8-IPK darf erst veröffentlicht werden, wenn der Nutzer sie selbst auf dem Receiver getestet und ausdrücklich freigegeben hat. Agenten- oder CI-Tests genügen dafür nicht.
+Neue IPKs dürfen erst veröffentlicht werden, wenn der Nutzer genau diese Version selbst auf dem Receiver getestet und ausdrücklich freigegeben hat. Für 0.1.9 liegt diese Bestätigung und Freigabe vor. Agenten- oder CI-Tests genügen dafür nicht.
 
 ## Paketmetadaten
 
