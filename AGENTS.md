@@ -1,0 +1,12 @@
+# Enigma-Plugins: Repository-Regeln
+
+- Jedes Plugin liegt vollständig unter `plugins/<Plugin>/`. Der zugehörige Arbeitskontext liegt unter `context/<Plugin>/`.
+- Vor Änderungen die vollständigen betroffenen Dateien und `context/<Plugin>/AGENTS.md`, `PROJECT_CONTEXT.md`, `NEXT_STEPS.md` und `CHAT_TEMPLATE.md` lesen. Vor neuen Funktionen zuerst prüfen, was schon vorhanden ist.
+- Den Kontext nach wesentlichen Änderungen und am Aufgabenende aktualisieren. Ein neuer Rechner muss allein mit dem Git-Stand, der Bauanleitung und den angegebenen öffentlich verfügbaren Werkzeugen weiterarbeiten können.
+- Vollständigen Quellcode, Build-Skripte, erforderliche Ressourcen, eingebettete Laufzeitprogramme, deren Originalquellen und Lizenzen versionieren. Keine nur lokal vorhandenen Build-Zutaten voraussetzen. Externe Standardwerkzeuge mit Version und offiziellem Bezug dokumentieren.
+- Neue IPKs erst hochladen, wenn der Nutzer genau diese Version persönlich getestet und ausdrücklich zur Veröffentlichung freigegeben hat. Agenten- und CI-Tests genügen nicht. Die erste angeforderte Veröffentlichung betrifft BoxSystemInfo 0.1.7.
+- Vor jedem Push und jedem Release-Upload alle vorgesehenen Dateien einschließlich Archive und Archivmetadaten auf private Daten prüfen. `python3 tools/audit_upload.py` prüft den Git-Index; zusätzliche Release-Dateien als Argument übergeben. Verdachtsfunde vor Upload klären.
+- Keine Zugangsdaten, privaten Netzadressen, lokalen Benutzernamen/-pfade, MAC-Adressen, Seriennummern, Receiver-Logs oder Screenshots mit Laufzeitdaten veröffentlichen. Persönliche Daten auch aus Archivmetadaten entfernen. Öffentliches Autorenkonto: Schrotty74.
+- Projekt- und Buildpfade aus dem Checkout bzw. zur Laufzeit ermitteln. Keine persönlichen absoluten Pfade oder Box-Adressen fest eintragen. Notwendige Linux-Systempfade sind dokumentierte Schnittstellen und keine Projektpfade.
+- Keine zusätzlichen Test-Apps oder globalen Umgebungsänderungen ohne ausdrücklichen Auftrag. Bestehende Dateien nicht nebenbei bereinigen. Eigene temporäre Dateien nach Verwendung entfernen.
+- Aktuelles Plugin: [BoxSystemInfo-Regeln](context/BoxSystemInfo/AGENTS.md), [Bauanleitung](plugins/BoxSystemInfo/BUILDING.md).

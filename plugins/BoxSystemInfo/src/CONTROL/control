@@ -1,0 +1,8 @@
+Package: enigma2-plugin-extensions-boxsysteminfo
+Version: 0.1.7
+Description: Lightweight receiver and Enigma2 image information plugin with selectable themes
+Section: extra
+Priority: optional
+Maintainer: Schrotty74
+Architecture: armv7ahf-neon
+License: MIT & GPL-2.0-only & Apache-2.0 WITH LLVM-exception
