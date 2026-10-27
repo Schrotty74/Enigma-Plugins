@@ -2,7 +2,7 @@
 
 0.1.10 ist als lokaler Testbuild implementiert und installiert; 67 technische Tests und Paketbau sind erfolgreich. Die GUI-Prüfung ist erfolgreich: Übersicht und Details, Sprachwahl und Intervallauswahl wurden auf dem Receiver kontrolliert. 0.1.9 bleibt das neueste freigegebene öffentliche IPK.
 
-- Persönlichen Nutzertest von 0.1.10 abwarten: Übersicht, SSD-Fehlerwerte, Netzwerk-Datenrate nach zwei Messungen, aktive DVB-Empfangswerte, Intervallwahl, Deutsch/Englisch.
+Der Nutzer hat den persönlichen Test von 0.1.10 mit „funktioniert gut“ bestätigt. Offen bleibt ausschließlich die ausdrückliche Freigabe zur Veröffentlichung der IPK.
 - 0.1.10-IPK erst nach persönlichem Test und ausdrücklicher Veröffentlichungsfreigabe hochladen. Dann Release-Dokumentation und Kontext von Teststand auf öffentlichen Stand umstellen.
 
 - Git-/Release-Stand `boxsysteminfo-v0.1.9` bei Fortsetzung prüfen; vollständige Quellen, beide READMEs, englischen Changelog und die Kontextdateien zusammen halten.

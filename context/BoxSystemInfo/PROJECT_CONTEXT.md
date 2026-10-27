@@ -17,7 +17,7 @@ Die fünf beauftragten Erweiterungen sind implementiert und als IPK auf dem Rece
 
 Das endgültige installierte Test-IPK hat SHA256 `3b8395ad40aaf973e567f53281a3dd3656e1b88d50108f728d1ad76a9076beb6`; Paket auf dem Mac und Receiver stimmen überein.
 
-0.1.10 wurde noch nicht vom Nutzer persönlich getestet oder zur Veröffentlichung freigegeben. Kein öffentliches IPK oder Release-Tag dafür anlegen. 0.1.9 bleibt das neueste öffentliche Release.
+Der Nutzer hat den persönlichen Test von 0.1.10 mit „funktioniert gut“ bestätigt. Die ausdrückliche Veröffentlichungsfreigabe steht noch aus. Kein öffentliches IPK oder Release-Tag dafür anlegen. 0.1.9 bleibt das neueste öffentliche Release.
 
 ## Öffentlicher Stand 0.1.9
 
