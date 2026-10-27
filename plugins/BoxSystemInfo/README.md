@@ -1,12 +1,33 @@
-# Box Systeminfo 0.1.11 local test build for Enigma2
+# Box Systeminfo 0.1.11 for Enigma2
 
 [English](README.md) · [Deutsch](README.de.md) · [Changelog](CHANGELOG.md) · [Build instructions](BUILDING.md)
 
 ![Box Systeminfo](src/usr/lib/enigma2/python/Plugins/Extensions/BoxSystemInfo/icon.png)
 
-Box Systeminfo displays receiver, storage, temperature, and image information on an Enigma2 screen. The author is Schrotty74. It targets open Enigma2 images such as OpenPLi and OpenATV on ARMv7 receivers. Version 0.1.9 was tested on the user's receiver; the user confirmed that the data is now displayed and approved publication of the IPK.
+Box Systeminfo displays receiver, storage, temperature and image information on an Enigma2 screen. Author: Schrotty74. It targets open Enigma2 images such as OpenPLi and OpenATV on ARMv7 receivers. Version 0.1.11 was tested successfully by the user and approved for publication.
 
-This page also describes local test build 0.1.11. Version 0.1.9 remains the latest public IPK. The user tested 0.1.10 successfully, but has not approved its publication. Version 0.1.11 passes 95 tests and is installed on the receiver; Receiver GUI checks passed for history charts, RAM details, card and threshold settings, diagnostic export and the update check. English chart labels were also checked. It has not been released.
+[Download 0.1.11 and read the release notes](https://github.com/Schrotty74/Enigma-Plugins/releases/tag/boxsysteminfo-v0.1.11).
+
+## Features
+
+- **Customizable overview:** three saved cards chosen from temperatures, RAM, root storage, recording storage and network. Selecting an existing card swaps its position.
+- **Four themes:** Midnight, Ocean, Amber and Light, with the selection saved.
+- **Receiver and image:** model, CPU, architecture, uptime, image name/version, build/date, Enigma2, kernel and Python versions.
+- **SSD and SMART:** temperature, model, health, power-on hours, supported error counters, reserve space and write totals; remaining lifetime only for an unambiguous supported percentage attribute.
+- **Recording storage:** capacity, used/free space, usage percentage, mount point and read-only status.
+- **CPU:** online cores, current/maximum frequency and 1/5/15-minute load averages.
+- **RAM and swap:** total, available, used and unused RAM, adjusted cache, buffers, and total/used/free swap.
+- **Network:** interface type, connection status, negotiated link speed and receive/send rates in Mbit/s.
+- **Active DVB tuner:** signal quality in dB or relative percent, AGC, BER and lock, plus detected frontend use and recording counts.
+- **History charts:** ten-minute temperature and network-rate curves held only in session RAM and cleared on closing.
+- **Refresh options:** manual OK refresh or automatic Off/2/5/10/30-second intervals; default 5 seconds. Automatic SMART reads at most once per minute.
+- **Warning settings:** saved SoC/drive temperature and RAM/storage usage thresholds, plus SMART and read-only storage warnings.
+- **German and English:** image-language selection with English fallback or a direct Menu override.
+- **Diagnostic export:** manual JSON report with only the plugin version and approved numeric fields, mode 0600 and no upload.
+- **Update notification:** manual search for newer published ARMv7 plugin packages; no automatic package download or installation.
+- **Complete ARMv7 package:** static smartctl 7.4, original smartmontools sources, licenses and build scripts included.
+
+Hardware-dependent values remain unavailable when the drive, tuner or image does not provide them.
 
 ## Screen and controls
 
@@ -16,8 +37,8 @@ The main screen shows cards for temperatures, memory, and free root storage, fol
 - OK: refresh values.
 - Exit or Red: close the plugin.
 - Yellow or Blue: open details.
-- In details, Up/Down or Yellow/Blue moves between storage/SSD, CPU, network, and tuner pages. Exit returns to the main overview.
-- Menu: set the automatic refresh interval, language, overview cards, warning thresholds, and history curves, check for a released update, export a diagnostic report, or open help. The interval options are Off, 2, 5, 10, and 30 seconds; the default is 5 seconds. The three overview cards can each use temperature, RAM, root storage, recording storage, or network. Defaults stay as shipped; choosing a card already in use swaps the selections. These choices are saved.
+- In details, Up/Down or Yellow/Blue moves between storage/SSD, CPU, RAM/swap, network, and tuner pages. Exit returns to the main overview.
+- Menu: set the refresh interval, language, overview cards and warning thresholds; open history charts, check for a released update, export a diagnostic report or open help. The interval options are Off, 2, 5, 10, and 30 seconds; the default is 5 seconds. The three overview cards can each use temperature, RAM, root storage, recording storage, or network. Defaults stay as shipped; choosing a card already in use swaps the selections. These choices are saved.
 
 Automatic refresh runs only while the plugin is open. OK refreshes immediately. SMART data is queried at most once every 60 seconds during automatic refresh; pressing OK starts a new SMART query. Changing the theme does not start another query. There is no background service. The language follows the image setting when available and otherwise falls back to English. Menu options can override it.
 
@@ -26,7 +47,7 @@ Automatic refresh runs only while the plugin is open. OK refreshes immediately. 
 The IPK contains the plugin and a statically built `smartctl` for ARMv7. No separate smartmontools installation is needed. The plugin does not install `smartd`, add autostart entries, or change firmware or network settings.
 
 ```sh
-opkg install /tmp/enigma2-plugin-extensions-boxsysteminfo_0.1.9_armv7ahf-neon.ipk
+opkg install /tmp/enigma2-plugin-extensions-boxsysteminfo_0.1.11_armv7ahf-neon.ipk
 ```
 
 **Restart the Enigma2 user interface (GUI) after installation.** The new plugin version loads after the restart. Take any active recordings into account before restarting.
@@ -58,7 +79,7 @@ The tuner view may not observe every active service, such as all streaming or pi
 
 ## History, overview cards, and diagnostic tools
 
-The optional history curves cover the last ten minutes of SoC and SSD temperature plus receive/send rates for the currently selected active network interface. SSD points are sampled during automatic refresh only when the latest drive reading is no more than 60 seconds old. The plugin does not poll the drive just to build a curve. History exists only for the current plugin session and is cleared when the plugin closes; it is not written to persistent storage. The Menu option **History curves** opens the chart view.
+The optional history curves cover the last ten minutes of SoC and SSD temperature plus receive/send rates for the automatically chosen active network interface. SSD points are added only when a fresh drive query completes; a timer refresh does not duplicate a cached reading. The plugin does not poll the drive just to build a curve. History exists only for the current plugin session and is cleared when the plugin closes; it is not written to persistent storage. The Menu option **History charts** opens the chart view.
 
 RAM details show total, available, used, free, cache, buffers, and swap. Available memory includes reclaimable memory; do not add it to cache and buffers.
 
@@ -96,11 +117,11 @@ The source archive contains plugin code, tests, build scripts, the original smar
 
 ## Compatibility and verification
 
-The 0.1.9 package has been built and the 48 regression tests pass. The user tested it on a receiver and confirmed that the data is displayed. OpenPLi and OpenATV are target images; OpenATV, other receivers, and Python 2 have not been tested on hardware. The plugin makes no universal compatibility claim. Tests use doubles for timeouts and process failures rather than deliberately blocking a receiver drive.
+Version 0.1.11 passes 95 automated tests. Receiver checks covered the overview, details, history charts, card selection, warning thresholds, German/English, diagnostic contents and file permissions, and the manual update check. The user then tested the installed package and approved publication.
 
-The 0.1.10 local test build passes 67 tests and has been installed on the receiver. Its installed Python sources were verified against the corresponding source checkout. The receiver GUI was checked: overview, detail pages, language selection and refresh options work. The user confirmed that 0.1.10 works; publication approval remains pending. Version 0.1.11 passes 95 tests and is installed as a local unreleased test build. GUI verification is in progress; personal user testing and publication approval are pending.
+Practical receiver testing used OpenPLi on a Vu+ Uno 4K SE. OpenATV and Python 2 remain untested on hardware; compatibility with every open image is not guaranteed. Timeout and cancellation tests use Enigma2 test doubles rather than deliberately blocking a receiver drive.
 
-The current release is 0.1.9. See the English [changelog](CHANGELOG.md) for earlier changes. The source tag is `boxsysteminfo-v0.1.9`.
+The current release is 0.1.11, tagged `boxsysteminfo-v0.1.11`. The detailed English [changelog](CHANGELOG.md) includes changes from the intermediate 0.1.10 development build. Earlier public releases remain available.
 
 ## Updates
 

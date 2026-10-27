@@ -61,9 +61,9 @@ Build-Ausgaben vor dem Commit prüfen. Das Git-Repository soll Quellcode, Skript
 
 OpenPLi und OpenATV sind Ziel-Images; bisher ist nur ein Receiver-/Image-Zielsystem verifiziert. Kein abgeschlossener End-to-End-Build auf einem frischen Mac ist belegt. Aus einem erfolgreichen lokalen Build folgt keine byte-identische Reproduzierbarkeit.
 
-Neue IPKs dürfen erst veröffentlicht werden, wenn der Nutzer genau diese Version selbst auf dem Receiver getestet und ausdrücklich freigegeben hat. Für 0.1.9 liegt diese Bestätigung und Freigabe vor. Agenten- oder CI-Tests genügen dafür nicht.
+Neue IPKs dürfen erst veröffentlicht werden, wenn der Nutzer genau diese Version selbst auf dem Receiver getestet und ausdrücklich freigegeben hat. Für 0.1.11 liegt diese persönliche Testbestätigung und Veröffentlichungsfreigabe vor. Agenten- oder CI-Tests genügen dafür nicht.
 
-Version 0.1.10 ist als lokaler Testbuild gebaut und auf dem Receiver installiert; 67 technische Tests sind erfolgreich. Der Nutzer hat bestätigt, dass die Version funktioniert. Die Veröffentlichungsfreigabe steht noch aus; 0.1.9 bleibt das neueste öffentliche IPK. Version 0.1.11 ist als lokaler, unveröffentlichter Testbuild installiert und besteht 95 Tests. Die GUI-Prüfung läuft; persönlicher Nutzertest und Freigabe stehen aus.
+Version 0.1.11 besteht 95 technische Tests und wurde auf dem Receiver sowie durch den Nutzer geprüft. Das veröffentlichte IPK ist das unveränderte getestete Paket; es wird für die Veröffentlichung nicht neu gebaut. Die Änderungen des Zwischenstands 0.1.10 sind enthalten.
 
 ## Paketmetadaten
 

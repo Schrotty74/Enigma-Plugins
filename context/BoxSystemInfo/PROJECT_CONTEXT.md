@@ -4,9 +4,9 @@
 
 Enigma2-Systeminfo-Plugin von Schrotty74 im Repository `Schrotty74/Enigma-Plugins`. Vollständiger Plugin-Bestand unter `plugins/BoxSystemInfo/`; dieser Kontext liegt getrennt unter `context/BoxSystemInfo/`.
 
-## Lokaler Teststand 0.1.11
+## Release-Stand 0.1.11
 
-Arbeitsbranch: `development/boxsysteminfo-0.1.11`. Die sechs beauftragten Ergänzungen sind implementiert und auf dem Receiver installiert. Eine Laufwerksauswahl war ausdrücklich ausgenommen und wurde nicht ergänzt.
+Release-Branch: `main`, Tag `boxsysteminfo-v0.1.11`. Entwickelt auf `development/boxsysteminfo-0.1.11`. Die sechs beauftragten Ergänzungen sind implementiert und auf dem Receiver installiert. Eine Laufwerksauswahl war ausdrücklich ausgenommen und wurde nicht ergänzt.
 
 - Menü „Verlaufskurven“: SoC-/SSD-Temperaturen und Empfang/Versand der aktiven Netzwerkschnittstelle über die letzten zehn Minuten. Nur echte Messungen mit Zeitstempeln, fehlende Werte als Lücken; SSD-Abfragen behalten ihren bisherigen Takt. Maximal 300 Punkte pro Reihe und 16 Reihen im RAM, keine Dateien oder Messung nach dem Schließen.
 - Drei gespeicherte Übersichtskarten: Temperatur, RAM, Root-Speicher, Aufnahmespeicher und Netzwerk zur Wahl. Standard bleibt Temperatur/RAM/Root; bereits verwendete Karten werden beim Auswählen getauscht.
@@ -15,7 +15,7 @@ Arbeitsbranch: `development/boxsysteminfo-0.1.11`. Die sechs beauftragten Ergän
 - Diagnoseexport ausschließlich per Menü: JSON im zur Laufzeit ermittelten temporären Verzeichnis, eindeutiger Dateiname und Modus 0600. Nur Plugin-Version und fest definierte numerische CPU-, RAM-, Root-/Aufnahmespeicher- und Temperaturwerte; keine Namen, Adressen, Seriennummern, Pfade oder Rohprotokolle im Bericht. Kein Versand.
 - Manuelle Update-Prüfung ausschließlich per Menü: Metadaten der letzten bis zu 100 GitHub-Releases im offiziellen Repository. Nur veröffentlichte, nicht als Vorabversion markierte BoxSystemInfo-Tags mit passendem ARMv7-IPK zählen. Begrenzter separater Prozess; keine Installation und kein Paketdownload.
 
-95 Tests, Paketbau und Datenschutzprüfung sind erfolgreich. Installierte Python-Quellen und IPK stimmen mit dem lokalen Stand überein. IPK-SHA256: `dbc83716e920e190f4b6c03633dd75435e9e981b2711c5b5e8994d3ebad6f71b`. Die GUI-Prüfung ist erfolgreich: Kurven, RAM-Seite, Kartenwechsel, Warnschwellen und Update-Hinweis funktionieren. Englische Verlaufsbeschriftungen wurden geprüft. Ein über die Oberfläche erzeugter Diagnosebericht wurde auf numerische Felder und Modus 0600 geprüft und anschließend gelöscht. Persönlicher Nutzertest und ausdrückliche Veröffentlichungsfreigabe für 0.1.11 stehen aus. 0.1.9 bleibt das neueste öffentliche IPK.
+95 Tests, Paketbau und Datenschutzprüfung sind erfolgreich. Installierte Python-Quellen und IPK stimmen mit dem lokalen Stand überein. IPK-SHA256: `dbc83716e920e190f4b6c03633dd75435e9e981b2711c5b5e8994d3ebad6f71b`. Die GUI-Prüfung ist erfolgreich: Kurven, RAM-Seite, Kartenwechsel, Warnschwellen und Update-Hinweis funktionieren. Englische Verlaufsbeschriftungen wurden geprüft. Ein über die Oberfläche erzeugter Diagnosebericht wurde auf numerische Felder und Modus 0600 geprüft und anschließend gelöscht. Der Nutzer hat das installierte 0.1.11-Paket erfolgreich getestet und seine Veröffentlichung mit ausführlichem englischem Changelog ausdrücklich beauftragt. 0.1.11 ist das aktuelle öffentliche IPK; der Upload verwendet das unveränderte getestete Paket. Beide READMEs enthalten eine vollständige Funktionsliste; Englisch bleibt Standard, beide Sprachen sind gegenseitig verlinkt.
 
 ## Vorheriger Teststand 0.1.10
 
@@ -30,7 +30,7 @@ Die fünf beauftragten Erweiterungen sind implementiert und als IPK auf dem Rece
 
 Das endgültige installierte Test-IPK hat SHA256 `3b8395ad40aaf973e567f53281a3dd3656e1b88d50108f728d1ad76a9076beb6`; Paket auf dem Mac und Receiver stimmen überein.
 
-Der Nutzer hat den persönlichen Test von 0.1.10 mit „funktioniert gut“ bestätigt. Die ausdrückliche Veröffentlichungsfreigabe steht noch aus. Kein öffentliches IPK oder Release-Tag dafür anlegen. 0.1.9 bleibt das neueste öffentliche Release.
+Der Nutzer hat den persönlichen Test von 0.1.10 mit „funktioniert gut“ bestätigt. 0.1.10 wurde nicht separat veröffentlicht; seine Änderungen sind im freigegebenen Release 0.1.11 enthalten.
 
 ## Öffentlicher Stand 0.1.9
 
@@ -47,7 +47,7 @@ Der Nutzer hat den persönlichen Test von 0.1.10 mit „funktioniert gut“ best
 
 Der Nutzer hat bestätigt, dass die fehlenden Speicherwerte in 0.1.9 angezeigt werden, und den IPK-Upload ausdrücklich beauftragt. Für 0.1.9 liegt damit die persönliche Testbestätigung und Freigabe vor. Jede spätere IPK-Version benötigt eine neue Bestätigung und Freigabe.
 
-0.1.7 ist als früheres Release unter `boxsysteminfo-v0.1.7` erhalten. Die Erweiterungsserie wurde auf `development/boxsysteminfo-0.1.8` entwickelt; aktueller Release-Tag ist `boxsysteminfo-v0.1.9`. Den tatsächlichen Branch-/Tag-/Release-Stand bei Fortsetzung mit Git/GitHub prüfen.
+0.1.7 ist als früheres Release unter `boxsysteminfo-v0.1.7` erhalten. Die Erweiterungsserie wurde auf `development/boxsysteminfo-0.1.8` entwickelt; damaliger Release-Tag war `boxsysteminfo-v0.1.9`; aktuell ist `boxsysteminfo-v0.1.11`. Den tatsächlichen Branch-/Tag-/Release-Stand bei Fortsetzung mit Git/GitHub prüfen.
 
 ## Nachbauen und Grenzen
 

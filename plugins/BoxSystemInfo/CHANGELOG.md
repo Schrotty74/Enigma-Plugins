@@ -1,26 +1,50 @@
 # Changelog
 
-## 0.1.11 local test build (unreleased)
+## 0.1.11 — 2026-10-27
 
-- Add ten-minute session-only curves for SoC and SSD temperatures and receive/send rates on the selected active network interface. Reuse an SSD reading only when it is no more than 60 seconds old; do not poll the drive just for history. Clear curves when the plugin closes.
-- Allow three overview cards to use temperature, RAM, root storage, recording storage, or network. Keep defaults unchanged and swap selections when a chosen card is already in use. Save the choices.
-- Add configurable visual warning thresholds: SoC 60–95 °C by 5 (default 80 °C), drive 40–70 °C by 5 (default 60 °C), and RAM/storage 75, 80, 85, 90, 95, or 98% (default 90%). These are advisories, not manufacturer limits.
-- Expand RAM details with total, available, used, free, cache, buffers, and swap. Available memory includes reclaimable memory and is not additive with cache or buffers.
-- Add a manual, numeric allowlist diagnostic export with the plugin version. Save it as JSON with mode 0600 in the runtime temporary directory. Exclude identifying/network data, local paths, logs, and credentials; do not upload it.
-- Add a manual update check for published, non-prerelease ARMv7 packages in the official GitHub repository. The check reads metadata only and never downloads or installs assets.
+Version 0.1.10 was a development build and was not published separately. Its changes are included in this 0.1.11 release.
 
-Version 0.1.11 passes 95 tests and is installed on the receiver; Receiver GUI checks passed for history charts, RAM details, card and threshold settings, diagnostic export and the update check. English chart labels were also checked. It is not released. Version 0.1.9 remains the latest public IPK; publication approval for the user-tested 0.1.10 is still pending.
+### Overview and controls
 
-## 0.1.10 local test build (not released)
+- Add three configurable overview cards. Each can show temperature, RAM, root storage, recording storage, or network. The defaults remain temperature, RAM, and root storage. Selecting a card already in use swaps the two selections. Choices are saved.
+- Add automatic refresh options of Off, 2, 5, 10, or 30 seconds (default: 5 seconds), active only while the plugin is open. Manual refresh remains available. Automatic SMART queries run at most once every 60 seconds; a manual refresh forces a new query.
+- Keep the general overview as the start screen, with detail pages for recording storage, SSD/SMART, CPU, RAM/swap, network, and tuners.
 
-- Add configurable automatic refresh while the plugin is open, with Off, 2, 5, 10, and 30 second intervals and a 5 second default. Manual refresh remains available; automatic SMART queries run at most once per 60 seconds, while manual refresh forces a query.
-- Add received and sent network rates in Mbit/s after two sysfs counter samples.
-- Add live DVB signal quality in dB or relative percent, signal power (AGC), BER, and lock state when the active frontend supports them.
-- Add allowlisted SMART wear and error counters. Remaining life is shown only for explicitly identified percentage fields; no estimate is derived from `Wear_Leveling_Count` or `Media_Wearout_Indicator`.
-- Add GNU gettext English and German catalogs, automatic image-language selection with English fallback, and a menu language override.
-- Add menu options for refresh interval and language, alongside help.
+### History
 
-This local test build passes 67 tests and is installed on the receiver. The user confirmed that it works; publication approval is pending. Version 0.1.9 remains the latest public IPK; 0.1.10 has not been approved or released.
+- Add ten-minute session-only curves for SoC and SSD temperatures and receive/send rates on the active network interface. The history holds at most 300 points per series and 16 series in memory. It is cleared when the plugin closes and is never saved to disk.
+- Record only fresh SSD readings received through normal query callbacks. Do not query the drive just to add a chart point. Missing readings remain gaps, with no reused samples or extrapolated values.
+
+### Memory and warnings
+
+- Add configurable visual warning thresholds: SoC 60–95 °C in 5-degree steps (default: 80 °C), drive 40–70 °C in 5-degree steps (default: 60 °C), and RAM/storage 75, 80, 85, 90, 95, or 98% (default: 90%). These thresholds are advisories, not manufacturer limits.
+- Expand RAM details to show total, available, used, free, cache, buffers, and swap. Available memory includes reclaimable memory and should not be added to cache or buffers.
+
+### SMART
+
+- Add allowlisted SMART wear, reserve-space, write-volume, and error counters, including reallocated/pending/uncorrectable sectors, CRC transfer errors, program and erase failures, reported uncorrectable errors, end-to-end errors, reserve space, and supported host/NAND write totals. Show remaining life only for fields explicitly identified as percentages. Do not infer a percentage from `Wear_Leveling_Count` or `Media_Wearout_Indicator`.
+- Keep SMART reads bounded and read-only. The bundled smartctl remains version 7.4; its original source archive and license files are included.
+
+### Network and tuner
+
+- Show receive and send rates in Mbit/s after two sysfs counter samples.
+- Show active DVB frontend signal quality in dB or relative percent, signal power (AGC), BER, and lock state when supported. Read the active service without tuning or reserving a tuner.
+
+### Language and refresh
+
+- Add GNU gettext English and German catalogs. Select the image language when available, fall back to English, or choose a language from the menu.
+- Add menu controls for refresh interval and language, alongside help. Manual SMART refresh remains available at any automatic refresh setting.
+
+### Diagnostics, privacy, and update check
+
+- Add a manual diagnostic export containing only the plugin version and strictly validated, allowlisted numeric CPU, memory, storage, and temperature fields. Unknown fields are rejected. The JSON file is written with mode 0600 to the runtime temporary directory. No identifiers, network details, local paths, logs, or credentials are included, and the plugin does not upload the report.
+- Add a manual update check for published, non-prerelease ARMv7 packages in the official GitHub repository. It reads release metadata for up to 100 releases, with an 8-second request timeout and a 10-second process limit. It does not download or install assets.
+
+### Validation and compatibility
+
+- The 0.1.11 build passes 95 tests. Receiver GUI checks covered the history charts, RAM details, overview-card and threshold settings, diagnostic export, and update check; English chart labels were also checked. The user personally tested the build and confirmed that it works well.
+- OpenATV and Python 2 have not been tested on a physical receiver. Compatibility with those environments is not confirmed.
+- The smartctl 7.4 binary is unchanged. Plugin source, the original smartmontools source archive, and the included license files remain with the plugin.
 
 ## 0.1.9
 
