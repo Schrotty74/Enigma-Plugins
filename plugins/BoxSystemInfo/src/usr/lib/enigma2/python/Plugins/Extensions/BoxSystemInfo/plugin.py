@@ -13,6 +13,9 @@ import json
 from .i18n import _
 from .probes import cpu_info, network_info, tuner_info, active_tuner_info, NetworkRates
 from .smart import parse_smart_wear
+from .metrics import parse_memory, SessionHistory
+from .services import export_report
+from .charts import HistoryScreen
 
 from enigma import eConsoleAppContainer, eTimer
 
@@ -43,7 +46,18 @@ config.plugins.boxsysteminfo.refresh_interval = ConfigSelection(
 config.plugins.boxsysteminfo.language = ConfigSelection(
     default="system", choices=[("system", "Image"), ("de", "Deutsch"), ("en", "English")])
 
-VERSION = "0.1.10"
+for _name, _default in (("card1", "temperature"), ("card2", "memory"), ("card3", "root")):
+    setattr(config.plugins.boxsysteminfo, _name, ConfigSelection(default=_default,
+            choices=[(key, key) for key in ("temperature", "memory", "root", "recording", "network")]))
+for _name, _default, _values in (
+        ("soc_warning", "80", (60, 65, 70, 75, 80, 85, 90, 95)),
+        ("drive_warning", "60", (40, 45, 50, 55, 60, 65, 70)),
+        ("storage_warning", "90", (75, 80, 85, 90, 95, 98)),
+        ("memory_warning", "90", (75, 80, 85, 90, 95, 98))):
+    setattr(config.plugins.boxsysteminfo, _name, ConfigSelection(default=_default,
+            choices=[(str(value), str(value)) for value in _values]))
+
+VERSION = "0.1.11"
 
 # Advisory display thresholds, not hardware manufacturer limits.
 SOC_WARNING = 80.0
@@ -85,23 +99,36 @@ def _pretty_bytes(value):
 
 
 def _memory_info():
-    values = {}
-    try:
-        with open("/proc/meminfo", "r") as handle:
-            for line in handle:
-                match = re.match(r"^(MemTotal|MemAvailable|MemFree|Buffers|Cached):\s+(\d+)", line)
-                if match:
-                    values[match.group(1)] = int(match.group(2)) * 1024
-    except (IOError, OSError):
-        return "—", "—"
-    total = values.get("MemTotal")
-    available = values.get("MemAvailable")
-    if available is None:
-        available = sum(values.get(key, 0) for key in ("MemFree", "Buffers", "Cached"))
+    values = parse_memory(_read("/proc/meminfo", ""))
+    total = values.get("total", 0)
     if not total:
         return "—", "—"
-    used = max(0, total - available)
+    used = values["used"]
     return "%s / %s" % (_pretty_bytes(used), _pretty_bytes(total)), _("%d%% belegt") % int(used * 100 / total)
+
+
+def _setting_value(name, default):
+    try:
+        return getattr(config.plugins.boxsysteminfo, name).value
+    except AttributeError:
+        return default
+
+
+def _threshold(name, default):
+    try:
+        return float(_setting_value(name, default))
+    except (TypeError, ValueError):
+        return float(default)
+
+
+def _temperature_value(text):
+    match = re.search(r"(-?[0-9]+(?:\.[0-9]+)?)\s*°C", text or "")
+    return float(match.group(1)) if match else None
+
+
+def _number_value(text):
+    match = re.match(r"^([0-9]+(?:\.[0-9]+)?)", text or "")
+    return float(match.group(1)) if match else None
 
 
 def _uptime():
@@ -521,6 +548,33 @@ class StorageQuery(DriveTemperatureQuery):
         self.callback(result)
 
 
+class UpdateQuery(StorageQuery):
+    def start(self):
+        self.active = True
+        self.output = ""
+        python = _find_executable("python3") or _find_executable("python")
+        if python is None:
+            self._finish({"status": "error"})
+            return
+        self.container = eConsoleAppContainer()
+        self.container.dataAvail.append(self._data)
+        self.container.appClosed.append(self._closed)
+        self.timer.start(10000, True)
+        try:
+            failed = self.container.execute(python, python,
+                os.path.join(os.path.dirname(__file__), "services.py"), "updates", VERSION)
+        except (OSError, TypeError, RuntimeError):
+            failed = True
+        if failed:
+            self._closed(1)
+
+    def _timeout(self):
+        if self.container is not None:
+            container = self._detach()
+            container.kill()
+            self._finish({"status": "error"})
+
+
 def _metadata_value(value):
     if value is None or isinstance(value, bool):
         return ""
@@ -671,6 +725,14 @@ class BoxSystemInfo(Screen):
             "blue": self.show_details,
             "menu": self.show_menu,
         }, -1)
+        self.version = VERSION
+        self._history = SessionHistory()
+        self._history_screen = None
+        self._update_query = None
+        self._memory = {}
+        self._memory_percent = None
+        self._network_current = ("—", None, None)
+        self._card_data = {}
         self._is_closed = False
         self._next_smart_refresh = 0
         self._network_sampler = NetworkRates()
@@ -711,6 +773,11 @@ class BoxSystemInfo(Screen):
         self._is_closed = True
         self._refresh_timer.stop()
         self._cancel_drive_query()
+        if self._update_query is not None:
+            self._update_query.cancel()
+            self._update_query = None
+        self._history.clear()
+        self._history_screen = None
         self._details_screen = None
 
     def _cancel_drive_query(self):
@@ -724,12 +791,14 @@ class BoxSystemInfo(Screen):
     def _drive_result(self, value):
         self._drive_value = value
         self._drive_details = self._drive_query.details if self._drive_query else {}
+        self._history.append("drive", _temperature_value(value))
         self._render_box()
         self.apply_theme()
         self._notify_details()
 
     def _recording_result(self, result):
         self._recording = result
+        self._render_cards()
         self._drive_query = DriveTemperatureQuery(self._drive_result, result.get("device"))
         self._drive_query.start()
         self.apply_theme()
@@ -738,6 +807,8 @@ class BoxSystemInfo(Screen):
     def _notify_details(self):
         if self._details_screen is not None:
             self._details_screen.render()
+        if self._history_screen is not None:
+            self._history_screen.render()
 
     def _details_closed(self, *args):
         self._details_screen = None
@@ -769,8 +840,15 @@ class BoxSystemInfo(Screen):
             if not any(label == _("Verbleibende Lebensdauer") for label, value in wear_rows):
                 storage_rows += [(_("Verbleibende Lebensdauer"), missing)]
             storage_rows += wear_rows
+        memory_rows = [(label, _pretty_bytes(self._memory.get(key)) if self._memory.get("total") else missing)
+                       for label, key in ((_("RAM gesamt"), "total"), (_("Verfügbar"), "available"),
+                                          (_("Belegt ohne verfügbaren RAM"), "used"), (_("Unbenutzt (MemFree)"), "free"),
+                                          (_("Cache, bereinigt"), "cache"), (_("Puffer"), "buffers"),
+                                          (_("Swap gesamt"), "swap_total"), (_("Swap belegt"), "swap_used"),
+                                          (_("Swap frei"), "swap_free"))]
         pages = []
         for title, rows in ((_("Aufnahmespeicher und Laufwerk"), storage_rows), (_("Prozessor"), self._cpu_rows),
+                            (_("Arbeitsspeicher und Swap"), memory_rows),
                             (_("Netzwerk"), self._network_rows), (_("Tuner und Aufnahmen"), self._tuner_rows)):
             for offset in range(0, len(rows), 12):
                 page_title = _("SSD-Zustand und Fehlerwerte") if title == _("Aufnahmespeicher und Laufwerk") and offset else title
@@ -781,10 +859,53 @@ class BoxSystemInfo(Screen):
         for index, (key, value) in enumerate(self._box_rows):
             self["box_label_%d" % index].setText(key)
             self["box_value_%d" % index].setText(value)
-        self["temperature_value"].setText("SoC  " + self._soc_value)
-        # Keep the temperature prominent and long failure messages readable.
-        drive = self._drive_value.split(" (", 1)[0]
-        self["temperature_detail"].setText("SSD  " + drive)
+        self._render_cards()
+
+    def current_theme(self):
+        return THEMES.get(config.plugins.boxsysteminfo.theme.value, THEMES["midnight"])
+
+    @staticmethod
+    def format_rate(value):
+        return "%.2f Mbit/s" % value if value is not None else _("Nicht verfügbar")
+
+    def _render_cards(self):
+        memory = self._memory
+        total = memory.get("total", 0)
+        self._memory_percent = int(memory.get("used", 0) * 100 / total) if total else None
+        interface, receive, send = self._network_current
+        missing = _("Nicht verfügbar")
+        free = lambda data: _pretty_bytes(data.get("free")) + _(" frei")
+        of_total = lambda data: _("von ") + _pretty_bytes(data.get("total"))
+        self._card_data = {
+            "temperature": (_("Temperaturen"), "SoC  " + self._soc_value, "SSD  " + self._drive_value.split(" (", 1)[0],
+                            _temperature_warning(self._soc_value, _threshold("soc_warning", SOC_WARNING)),
+                            _temperature_warning(self._drive_value, _threshold("drive_warning", DRIVE_WARNING)) or self._drive_details.get("health_failed")),
+            "memory": (_("Arbeitsspeicher"), _("%d%% belegt") % self._memory_percent if self._memory_percent is not None else missing,
+                       "%s / %s" % (_pretty_bytes(memory.get("used")), _pretty_bytes(total)) if total else missing,
+                       self._memory_percent is not None and self._memory_percent >= _threshold("memory_warning", STORAGE_WARNING), False),
+            "root": (_("Root-Speicher"), free(self._root), of_total(self._root),
+                     self._root.get("percent", 0) >= _threshold("storage_warning", STORAGE_WARNING), False),
+            "recording": (_("Aufnahmespeicher"), free(self._recording) if "free" in self._recording else _(self._recording.get("status", missing)),
+                          of_total(self._recording), self._recording.get("percent", 0) >= _threshold("storage_warning", STORAGE_WARNING), self._recording.get("read_only")),
+            "network": (_("Netzwerk"), _("Empfang %s") % self.format_rate(receive),
+                        _("Versand %s") % self.format_rate(send), False, False),
+        }
+        for index, position in enumerate(("temperature", "memory", "storage")):
+            choice = _setting_value("card%d" % (index + 1), ("temperature", "memory", "root")[index])
+            title, value, detail, warning, detail_warning = self._card_data.get(choice, self._card_data["root"])
+            for suffix, text in (("title", title), ("value", value), ("detail", detail)):
+                self[position + "_" + suffix].setText(text)
+
+    def _capture_network(self):
+        interfaces = [(key, value) for key, value in self._network_rows if " – " not in key]
+        connected = [key for key, value in interfaces if _("Verbunden") in value]
+        interface = (connected or [key for key, value in interfaces] or ["—"])[0]
+        values = dict(self._network_rows)
+        receive = _number_value(values.get(_("%s – Empfangen") % interface, ""))
+        send = _number_value(values.get(_("%s – Gesendet") % interface, ""))
+        self._network_current = (interface, receive, send)
+        self._history.append("rx:" + interface, receive)
+        self._history.append("tx:" + interface, send)
 
     def refresh(self, automatic=False):
         if self._is_closed:
@@ -808,7 +929,8 @@ class BoxSystemInfo(Screen):
         for name, title in (("temperature", _("Temperaturen")), ("memory", _("Arbeitsspeicher")), ("storage", _("Root-Speicher"))):
             self[name + "_title"].setText(_(title))
         image_name, image_version, image_build = _image_info()
-        memory, memory_percent = _memory_info()
+        self._memory = parse_memory(_read("/proc/meminfo", ""))
+        self._capture_network()
         model = _box_model()
         version = _enigma_version()
         kernel = platform.release() or "—"
@@ -820,12 +942,8 @@ class BoxSystemInfo(Screen):
             (_("Systemlaufzeit"), _uptime()),
         ]
         self._soc_value = _soc_temperature()
-        self._memory_warning = bool(re.match(r"^(9[0-9]|100)%", memory_percent))
-        self["memory_value"].setText(memory_percent)
-        self["memory_detail"].setText(memory)
+        self._history.append("soc", _temperature_value(self._soc_value))
         self._root = _root_usage()
-        self["storage_value"].setText(_pretty_bytes(self._root.get("free")) + _(" frei"))
-        self["storage_detail"].setText(_("von ") + _pretty_bytes(self._root.get("total")))
         image_rows = [
             ("Image", image_name),
             (_("Image-Version"), image_version),
@@ -886,12 +1004,12 @@ class BoxSystemInfo(Screen):
         for key in ("subheading", "footer", "release"):
             self._set_color(self[key], theme["bg"])
             self._set_color(self[key], theme["muted"], True)
-        self._set_color(self["temperature_value"], "#e46969" if _temperature_warning(self._soc_value, SOC_WARNING) else theme["accent"], True)
-        self._set_color(self["temperature_detail"], "#e46969" if _temperature_warning(self._drive_value, DRIVE_WARNING) else theme["text"], True)
-        self._set_color(self["memory_value"], "#e46969" if self._memory_warning else theme["accent"], True)
-        self._set_color(self["storage_value"], "#e46969" if self._root.get("percent", 0) >= STORAGE_WARNING else theme["accent"], True)
-        if self._drive_details.get("health_failed"):
-            self._set_color(self["temperature_detail"], "#e46969", True)
+        for index, position in enumerate(("temperature", "memory", "storage")):
+            choice = _setting_value("card%d" % (index + 1), ("temperature", "memory", "root")[index])
+            data = self._card_data.get(choice)
+            if data:
+                self._set_color(self[position + "_value"], "#e46969" if data[3] else theme["accent"], True)
+                self._set_color(self[position + "_detail"], "#e46969" if data[4] else theme["text"], True)
         if self.instance is not None:
             self.instance.invalidate()
 
@@ -903,6 +1021,7 @@ class BoxSystemInfo(Screen):
         config.plugins.boxsysteminfo.theme.save()
         configfile.save()
         self.apply_theme()
+        self._notify_details()
         theme = THEMES.get(config.plugins.boxsysteminfo.theme.value, THEMES["midnight"])
         self["footer"].setText(_("◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Optionen    EXIT Schließen") % theme["name"])
 
@@ -919,12 +1038,27 @@ class BoxSystemInfo(Screen):
             title=_("Box Systeminfo · Optionen"), list=[
                 (_("Aktualisierung: %s") % (_("Aus") if interval == "0" else interval + " s"), "refresh"),
                 (_("Sprache: %s") % {"system": _("Image-Sprache"), "de": "Deutsch", "en": "English"}.get(language, language), "language"),
+                (_("Startübersicht anpassen"), "cards"),
+                (_("Warnschwellen"), "thresholds"),
+                (_("Verlaufskurven"), "history"),
+                (_("Diagnosebericht exportieren"), "export"),
+                (_("Nach Plugin-Updates suchen"), "updates"),
                 (_("Hilfe"), "help")])
 
     def _menu_selected(self, choice):
         if not choice or self._is_closed:
             return
-        if choice[1] == "help":
+        if choice[1] == "cards":
+            self.show_cards_menu()
+        elif choice[1] == "thresholds":
+            self.show_threshold_menu()
+        elif choice[1] == "history":
+            self._history_screen = self.session.openWithCallback(self._history_closed, HistoryScreen, self)
+        elif choice[1] == "export":
+            self.export_diagnostics()
+        elif choice[1] == "updates":
+            self.check_updates()
+        elif choice[1] == "help":
             self.show_help()
         elif choice[1] == "refresh":
             choices = [(_("Aus"), "0")] + [(str(n) + " s", str(n)) for n in (2, 5, 10, 30)]
@@ -948,9 +1082,124 @@ class BoxSystemInfo(Screen):
             configfile.save()
             self.refresh()
 
+    def _history_closed(self, *args):
+        self._history_screen = None
+
+    def show_cards_menu(self):
+        choices = []
+        for index in range(3):
+            key = "card%d" % (index + 1)
+            value = _setting_value(key, ("temperature", "memory", "root")[index])
+            label = self._card_data.get(value, self._card_data["root"])[0]
+            choices.append((_("Karte %d: %s") % (index + 1, label), key))
+        self.session.openWithCallback(self._card_slot_selected, ChoiceBox,
+            title=_("Startübersicht anpassen"), list=choices)
+
+    def _card_slot_selected(self, choice):
+        if not choice or self._is_closed:
+            return
+        self._editing_card = choice[1]
+        choices = [(self._card_data[key][0], key) for key in
+                   ("temperature", "memory", "root", "recording", "network")]
+        self.session.openWithCallback(self._card_selected, ChoiceBox,
+            title=_("Inhalt der Karte"), list=choices)
+
+    def _card_selected(self, choice):
+        if not choice or self._is_closed:
+            return
+        element = getattr(config.plugins.boxsysteminfo, self._editing_card)
+        previous = element.value
+        for key in ("card1", "card2", "card3"):
+            other = getattr(config.plugins.boxsysteminfo, key)
+            if key != self._editing_card and other.value == choice[1]:
+                other.value = previous
+                other.save()
+        element.value = choice[1]
+        element.save()
+        configfile.save()
+        self._render_cards()
+        self.apply_theme()
+
+    def show_threshold_menu(self):
+        choices = []
+        for label, key, default, unit in ((_("SoC-Temperatur"), "soc_warning", 80, "°C"),
+                                         (_("Laufwerkstemperatur"), "drive_warning", 60, "°C"),
+                                         (_("Speicherbelegung"), "storage_warning", 90, "%"),
+                                         (_("RAM-Belegung"), "memory_warning", 90, "%")):
+            choices.append(("%s: %s %s" % (label, _setting_value(key, str(default)), unit), key))
+        self.session.openWithCallback(self._threshold_selected, ChoiceBox,
+            title=_("Warnschwellen"), list=choices)
+
+    def _threshold_selected(self, choice):
+        if not choice or self._is_closed:
+            return
+        self._editing_threshold = choice[1]
+        if choice[1] == "soc_warning":
+            values, unit = (60, 65, 70, 75, 80, 85, 90, 95), "°C"
+        elif choice[1] == "drive_warning":
+            values, unit = (40, 45, 50, 55, 60, 65, 70), "°C"
+        else:
+            values, unit = (75, 80, 85, 90, 95, 98), "%"
+        self.session.openWithCallback(self._threshold_value_selected, ChoiceBox,
+            title=_("Warnung ab"), list=[("%d %s" % (value, unit), str(value)) for value in values])
+
+    def _threshold_value_selected(self, choice):
+        if choice and not self._is_closed:
+            element = getattr(config.plugins.boxsysteminfo, self._editing_threshold)
+            element.value = choice[1]
+            element.save()
+            configfile.save()
+            self._render_cards()
+            self.apply_theme()
+            self._notify_details()
+
+    def export_diagnostics(self):
+        try:
+            loads = [float(value) for value in _read("/proc/loadavg", "").split()[:3]]
+            if len(loads) != 3:
+                loads = [None] * 3
+        except ValueError:
+            loads = [None] * 3
+        cores = _number_value(dict(self._cpu_rows).get(_("Kerne"), ""))
+        snapshot = {
+            "cpu": dict(zip(("cores", "load_1", "load_5", "load_15"),
+                            [int(cores) if cores is not None else None] + loads)),
+            "memory": {"total_bytes": self._memory.get("total"), "available_bytes": self._memory.get("available")},
+            "root_storage": {"total_bytes": self._root.get("total"), "free_bytes": self._root.get("free")},
+            "recording_storage": {"total_bytes": self._recording.get("total"), "free_bytes": self._recording.get("free")},
+            "temperatures": {"soc_c": _temperature_value(self._soc_value), "drive_c": _temperature_value(self._drive_value)},
+        }
+        try:
+            path = export_report(snapshot, plugin_version=VERSION)
+            message = _("Diagnosebericht gespeichert:\n%s\n\nEnthält nur Plugin-Version und freigegebene Messwerte. Es werden keine Daten versendet.") % path
+        except (OSError, IOError, ValueError, TypeError):
+            message = _("Diagnosebericht konnte nicht gespeichert werden.")
+        self.session.open(MessageBox, message, type=MessageBox.TYPE_INFO)
+
+    def check_updates(self):
+        if self._update_query is not None and self._update_query.active:
+            self.session.open(MessageBox, _("Update-Prüfung läuft bereits."), type=MessageBox.TYPE_INFO, timeout=3)
+            return
+        self._update_query = UpdateQuery(self._update_result)
+        self._update_query.start()
+        self.session.open(MessageBox, _("Freigegebene Plugin-Versionen werden auf GitHub geprüft …"), type=MessageBox.TYPE_INFO, timeout=2)
+
+    def _update_result(self, result):
+        self._update_query = None
+        if self._is_closed:
+            return
+        version = result.get("version", "")
+        if result.get("status") == "newer" and isinstance(version, (str, type(u""))) and re.match(r"^[0-9]+(?:\.[0-9]+)*$", version):
+            message = _("Neue freigegebene Plugin-Version: %s\n\nEs wird nichts automatisch installiert.\nGitHub: Schrotty74/Enigma-Plugins → Releases") % version
+        elif result.get("status") == "current":
+            message = _("Kein neueres freigegebenes ARMv7-Paket gefunden. Installierte Version: %s") % VERSION
+        else:
+            message = _("Update-Prüfung fehlgeschlagen. Netzwerkverbindung und Zertifikate prüfen oder später erneut versuchen.")
+        self.session.open(MessageBox, message, type=MessageBox.TYPE_INFO)
+
     def show_help(self):
         self.session.open(MessageBox,
-            _("Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details öffnen\nIn Details: Hoch/Runter oder Gelb/Blau blättern\nOK: Werte aktualisieren; Exit: schließen\n\nHinweise ab: SoC 80 °C, Laufwerk 60 °C, Speicher 90 % belegt. Das sind Hinweisschwellen, keine Herstellergrenzwerte.\n\nSystemlast ist keine CPU-Prozentanzeige. Tunerbelegung erfasst Live-TV und bekannte Aufnahme-/Streaming-Frontends; unerkannte Nutzung kann bestehen. MENU: Aktualisierung und Sprache einstellen. Automatische Aktualisierung läuft nur bei geöffnetem Plugin; SMART höchstens einmal pro Minute. AGC ist ein Treiberwert, keine kalibrierte Feldstärke. SSD-Verschleiß wird nur bei eindeutigem Attribut angezeigt."),
+            _("Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details; dort Hoch/Runter zum Blättern\nOK: aktualisieren; Exit: zurück oder schließen\nMENU: Karten, Warnschwellen, Sprache, Intervall, Verlauf, Diagnoseexport und Update-Prüfung\n\nVerlauf nur im RAM für diese Sitzung. SMART automatisch höchstens einmal pro Minute. Warnschwellen sind Hinweise, keine Herstellergrenzwerte. Systemlast ist keine CPU-Prozentanzeige. AGC ist ein relativer Treiberwert; nicht erkannte Tuner-Nutzung bedeutet nicht frei."),
             type=MessageBox.TYPE_INFO, timeout=8)
 
 
@@ -1009,6 +1258,8 @@ class SystemDetails(Screen):
             note = _("Systemlast: Mittelwerte über 1, 5 und 15 Minuten; keine CPU-Auslastung in Prozent.")
         elif title == _("SSD-Zustand und Fehlerwerte"):
             note = _("SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt.")
+        elif title == _("Arbeitsspeicher und Swap"):
+            note = _("Verfügbarer RAM umfasst rückgewinnbaren Speicher. Cache ist nicht zusätzlich zu addieren.")
         elif title.startswith(_("Aufnahme")):
             note = _("Aufnahmespeicher und SMART-Gerät können unterschiedlich sein, etwa bei Netzwerkaufnahmen.")
         self["note"].setText(note)
@@ -1026,9 +1277,9 @@ class SystemDetails(Screen):
             self.owner._set_color(self["label_%d" % index], theme["panel"])
             self.owner._set_color(self["value_%d" % index], theme["panel"])
             self.owner._set_color(self["label_%d" % index], theme["muted"], True)
-            warning = (key == _("Speicherbelegung") and self.owner._recording.get("percent", 0) >= STORAGE_WARNING
+            warning = (key == _("Speicherbelegung") and self.owner._recording.get("percent", 0) >= _threshold("storage_warning", STORAGE_WARNING)
                        or key == _("SMART-Gesamtstatus") and self.owner._drive_details.get("health_failed")
-                       or key == _("Laufwerkstemperatur") and _temperature_warning(self.owner._drive_value, DRIVE_WARNING)
+                       or key == _("Laufwerkstemperatur") and _temperature_warning(self.owner._drive_value, _threshold("drive_warning", DRIVE_WARNING))
                        or key == _("Speicherstatus") and self.owner._recording.get("read_only")
                        or key == _("SSD-Zustand") and self.owner._drive_details.get("wear_warning"))
             self.owner._set_color(self["value_%d" % index], "#e46969" if warning else theme["text"], True)

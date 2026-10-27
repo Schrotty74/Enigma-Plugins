@@ -1,4 +1,4 @@
-# Box Systeminfo 0.1.9 für Enigma2
+# Box Systeminfo 0.1.11 lokaler Testbuild für Enigma2
 
 [English](README.md) · [Deutsch](README.de.md) · [Changelog (English)](CHANGELOG.md) · [Bauanleitung](BUILDING.md)
 
@@ -6,7 +6,7 @@
 
 Box Systeminfo zeigt Receiver-, Speicher-, Temperatur- und Image-Daten auf einem Enigma2-Bildschirm. Autor ist Schrotty74. Das Plugin richtet sich an offene Enigma2-Images wie OpenPLi und OpenATV auf ARMv7-Receivern. Version 0.1.9 wurde auf dem Receiver des Nutzers getestet. Der Nutzer bestätigte, dass die Daten jetzt angezeigt werden, und gab die Veröffentlichung des IPK frei.
 
-Diese Seite beschreibt auch Änderungen im lokalen Testbuild 0.1.10. Version 0.1.9 bleibt das neueste öffentliche IPK; 0.1.10 ist weder freigegeben noch veröffentlicht.
+Diese Seite beschreibt auch den lokalen Testbuild 0.1.11. Version 0.1.9 bleibt das neueste öffentliche IPK. Der Nutzer hat 0.1.10 erfolgreich getestet, aber noch nicht zur Veröffentlichung freigegeben. Version 0.1.11 besteht 95 Tests und ist auf dem Receiver installiert; die GUI-Prüfung läuft. Die Version ist nicht veröffentlicht.
 
 ## Bildschirm und Bedienung
 
@@ -17,7 +17,7 @@ Die Startansicht zeigt Karten für Temperaturen, Arbeitsspeicher und freien Root
 - Exit oder Rot: Plugin schließen.
 - Gelb oder Blau: Details öffnen.
 - In den Details blättern Hoch/Runter oder Gelb/Blau durch Speicher/SSD, CPU, Netzwerk und Tuner. Exit führt zurück zur Startübersicht.
-- Menü: automatisches Aktualisierungsintervall oder Sprache einstellen und Hilfe öffnen. Zur Wahl stehen Aus, 2, 5, 10 und 30 Sekunden; standardmäßig sind es 5 Sekunden.
+- Menü: Aktualisierungsintervall, Sprache, Übersichtskarten, Warnschwellen und Verlaufskurven einstellen, manuell nach einer freigegebenen Version suchen, einen Diagnosebericht exportieren oder die Hilfe öffnen. Zur Wahl stehen Aus, 2, 5, 10 und 30 Sekunden; standardmäßig sind es 5 Sekunden. Die drei Übersichtskarten lassen sich jeweils mit Temperatur, RAM, Root-Speicher, Aufnahmespeicher oder Netzwerk belegen. Die Voreinstellungen bleiben erhalten. Wird eine bereits verwendete Karte gewählt, tauschen die Belegungen. Die Auswahl wird gespeichert.
 
 Automatische Aktualisierungen laufen nur, solange das Plugin geöffnet ist. OK aktualisiert sofort. Bei automatischen Aktualisierungen werden SMART-Daten höchstens einmal in 60 Sekunden abgefragt; OK startet eine neue SMART-Abfrage. Ein Theme-Wechsel startet keine neue Abfrage. Es gibt keinen Hintergrunddienst. Die Sprache folgt nach Möglichkeit der Image-Einstellung und fällt andernfalls auf Englisch zurück. Über das Menü lässt sie sich ändern.
 
@@ -52,9 +52,19 @@ Die Anzeige unterscheidet unter anderem fehlendes Werkzeug, Standby, Zeitübersc
 - CPU: Anzahl aktiver Kerne, aktueller und maximaler Takt, soweit verfügbar, sowie Systemlast über 1, 5 und 15 Minuten. Systemlast ist keine prozentuale CPU-Auslastung.
 - Netzwerk: Schnittstelle, Typ, Verbindungsstatus, ausgehandelte Linkgeschwindigkeit, sofern der Treiber sie bereitstellt, und Empfangs-/Senderaten in Mbit/s. Raten erscheinen nach zwei Zählerständen. Es erfolgen keine Internetabfragen. IP- und MAC-Adressen werden nicht angezeigt.
 - Tuner: konfigurierte Frontends und erkannte aktive Nutzung. Der aktive DVB-Dienst kann zusätzlich Signalqualität in dB oder als treiberabhängigen Prozentwert, relative Signalstärke (AGC), BER und Lock-Status melden. Nicht unterstützte Werte bleiben nicht verfügbar. FBC-Tuner können virtuelle Frontends liefern. Ein nicht beobachteter Tuner wird nicht als frei ausgegeben. Echte Aufnahmen werden nach Möglichkeit gefiltert; ein Zähler aus der Timerliste wird entsprechend bezeichnet.
-- Hinweise: SoC-Temperatur ab 80 °C, Laufwerkstemperatur ab 60 °C und Speicherbelegung ab 90 %. SMART-Fehler und ein nur lesbarer Aufnahmespeicher werden ebenfalls hervorgehoben. Diese Schwellen sind Hinweise und keine Herstellergrenzwerte.
+- Hinweise: SoC-Schwellen von 60 bis 95 °C in 5-Grad-Schritten (Standard 80 °C), Laufwerksschwellen von 40 bis 70 °C in 5-Grad-Schritten (Standard 60 °C) sowie RAM- und Speichergrenzen von 75, 80, 85, 90, 95 oder 98 % (Standard 90 %). SMART-Fehler und ein nur lesbarer Aufnahmespeicher werden ebenfalls hervorgehoben. Die Anzeige ist ein visueller Hinweis, keine Herstellergrenze.
 
 Die Tuneransicht erkennt möglicherweise nicht jede aktive Nutzung, etwa alle Streaming- oder Bild-in-Bild-Dienste. „Keine aktive Nutzung erkannt“ bedeutet deshalb nicht, dass ein Tuner sicher frei ist.
+
+## Verlauf, Übersichtskarten und Diagnose
+
+Die optionalen Verlaufskurven zeigen die letzten zehn Minuten der SoC- und SSD-Temperatur sowie Empfangs- und Senderaten der aktuell ausgewählten aktiven Netzwerkschnittstelle. SSD-Werte werden bei automatischer Aktualisierung nur übernommen, wenn die letzte Laufwerksmessung höchstens 60 Sekunden alt ist. Für die Kurve wird das Laufwerk nicht zusätzlich abgefragt. Der Verlauf besteht nur während der geöffneten Plugin-Sitzung und wird beim Schließen gelöscht; er wird nicht dauerhaft gespeichert. Die Ansicht öffnet sich über den Menüpunkt **Verlaufskurven**.
+
+Die RAM-Details zeigen Gesamt-, verfügbaren, belegten und freien Speicher sowie Cache, Puffer und Swap. Der verfügbare Speicher enthält rückgewinnbaren Speicher und darf nicht zu Cache und Puffern addiert werden.
+
+**Diagnosebericht exportieren** ist ein manueller Menüpunkt. Er schreibt eine numerische Positivliste und die Plugin-Version als JSON-Datei in das temporäre Laufzeitverzeichnis, mit Dateimodus 0600. IP- und MAC-Adressen, Seriennummern, Hostnamen, lokale Pfade, Protokolle und Zugangsdaten sind nicht enthalten. Das Plugin lädt die Datei nicht hoch.
+
+**Nach Updates suchen** ist ebenfalls ein manueller Menüpunkt. Er prüft Metadaten veröffentlichter, nicht als Vorabversion markierter ARMv7-Pakete im offiziellen GitHub-Repository. Release-Dateien werden weder heruntergeladen noch installiert. Die Netzwerkanfrage läuft außerhalb des GUI-Threads und hat ein Zeitlimit.
 
 ## Image- und Enigma2-Versionen
 
@@ -88,13 +98,13 @@ Das Quellarchiv enthält Plugin-Code, Tests, Build-Skripte, die Originalquellen 
 
 OpenPLi und OpenATV sind Ziel-Images. Praktisch geprüft wurde bisher eine Receiver-/Image-Kombination. OpenATV, andere Receiver und Python 2 wurden nicht auf Hardware getestet. Eine allgemeine Kompatibilitätszusage gibt es nicht. Zeitüberschreitungen und Prozessfehler werden mit Testdoubles geprüft, nicht durch absichtlich blockierte Laufwerke auf dem Receiver.
 
-Der lokale Testbuild 0.1.10 besteht 67 Tests und ist auf dem Receiver installiert. Die installierten Python-Quellen stimmen mit dem Checkout überein. Übersicht, Detailseiten, Sprachwahl und Aktualisierungsoptionen wurden auf dem Receiver geprüft. Persönlicher Nutzertest und Veröffentlichungsfreigabe stehen aus.
+Der lokale Testbuild 0.1.10 besteht 67 Tests und ist auf dem Receiver installiert. Die installierten Python-Quellen wurden mit dem damaligen Checkout abgeglichen. Übersicht, Detailseiten, Sprachwahl und Aktualisierungsoptionen wurden auf dem Receiver geprüft. Der Nutzer bestätigte, dass 0.1.10 funktioniert; die Veröffentlichungsfreigabe steht noch aus. Version 0.1.11 besteht 95 Tests und ist als unveröffentlichter lokaler Testbuild installiert. Die GUI-Prüfung läuft; persönlicher Nutzertest und Veröffentlichungsfreigabe stehen aus.
 
 Die aktuelle Version ist 0.1.9. Frühere Änderungen stehen im englischen [Changelog](CHANGELOG.md). Der Quellcode-Tag heißt `boxsysteminfo-v0.1.9`.
 
 ## Updates
 
-Es gibt keinen festen Veröffentlichungsrhythmus und keine automatische Update-Quelle. Neue Pakete werden bei Bedarf erstellt und können eine neuere geprüfte smartctl-Version enthalten. Das Plugin lädt keine Programme herunter. Das mitgelieferte Werkzeug gehört zum Plugin-Paket und wird damit aktualisiert.
+Das Menü bietet eine optionale manuelle Suche nach veröffentlichten Versionen. Sie liest Release-Metadaten aus dem offiziellen GitHub-Repository, berücksichtigt veröffentlichte ARMv7-Pakete ohne Vorabversion und lädt keine Pakete herunter oder installiert sie. Automatische Prüfungen finden nicht statt.
 
 ## Lizenz
 

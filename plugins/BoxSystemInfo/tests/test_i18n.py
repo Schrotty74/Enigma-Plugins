@@ -42,7 +42,7 @@ class TranslationTests(unittest.TestCase):
 
     def test_english_catalog_covers_source_and_preserves_placeholders(self):
         catalog = gettext.translation('BoxSystemInfo', str(BASE / 'locale'), languages=['en'])
-        for path in (BASE / 'plugin.py', BASE / 'probes.py', BASE / 'smart.py'):
+        for path in (BASE / 'plugin.py', BASE / 'probes.py', BASE / 'smart.py', BASE / 'charts.py'):
             for node in ast.walk(ast.parse(path.read_text())):
                 if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == '_'
                         and node.args and isinstance(node.args[0], ast.Constant)):

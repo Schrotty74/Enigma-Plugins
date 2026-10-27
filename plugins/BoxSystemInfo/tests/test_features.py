@@ -176,7 +176,8 @@ class ScreenLifecycleTests(unittest.TestCase):
                          _drive_devices=lambda: ['/sys/block/sda'], _drive_hwmon=lambda devices: None)
         assignments = [n for n in TREE.body if isinstance(n, ast.Assign) and any(isinstance(t,ast.Name) and t.id in ('VERSION','THEMES','SOC_WARNING','DRIVE_WARNING','STORAGE_WARNING') for t in n.targets)]
         classes = [n for n in TREE.body if isinstance(n, ast.ClassDef) and n.name in ('DriveTemperatureQuery','StorageQuery','BoxSystemInfo','SystemDetails')]
-        exec(compile(ast.Module(body=assignments+classes,type_ignores=[]),'screen','exec'), namespace)
+        helpers = [n for n in TREE.body if isinstance(n, ast.FunctionDef) and n.name in ('_setting_value', '_threshold')]
+        exec(compile(ast.Module(body=assignments+helpers+classes,type_ignores=[]),'screen','exec'), namespace)
         Container.instances = []
         screen = namespace['BoxSystemInfo'](types.SimpleNamespace())
         first = Container.instances[-1]
@@ -187,7 +188,7 @@ class ScreenLifecycleTests(unittest.TestCase):
         smart = Container.instances[-1]
         smart.emit('Device Model: Example SSD\nTemperature: 34 Celsius',0)
         self.assertIn('34.0',screen['temperature_detail'].text)
-        self.assertEqual(len(screen.detail_pages()),4)
+        self.assertEqual(len(screen.detail_pages()),5)
         # Fast timer ticks retain SMART values and never restart completed work
         # until its separate one-minute deadline.
         count = len(Container.instances)

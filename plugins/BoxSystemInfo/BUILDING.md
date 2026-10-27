@@ -63,7 +63,7 @@ OpenPLi und OpenATV sind Ziel-Images; bisher ist nur ein Receiver-/Image-Zielsys
 
 Neue IPKs dürfen erst veröffentlicht werden, wenn der Nutzer genau diese Version selbst auf dem Receiver getestet und ausdrücklich freigegeben hat. Für 0.1.9 liegt diese Bestätigung und Freigabe vor. Agenten- oder CI-Tests genügen dafür nicht.
 
-Version 0.1.10 ist als lokaler Testbuild gebaut und auf dem Receiver installiert; 67 technische Tests sind erfolgreich. Persönlicher Nutzertest und Veröffentlichungsfreigabe stehen noch aus. 0.1.9 bleibt das neueste öffentliche IPK.
+Version 0.1.10 ist als lokaler Testbuild gebaut und auf dem Receiver installiert; 67 technische Tests sind erfolgreich. Der Nutzer hat bestätigt, dass die Version funktioniert. Die Veröffentlichungsfreigabe steht noch aus; 0.1.9 bleibt das neueste öffentliche IPK. Version 0.1.11 ist als lokaler, unveröffentlichter Testbuild installiert und besteht 95 Tests. Die GUI-Prüfung läuft; persönlicher Nutzertest und Freigabe stehen aus.
 
 ## Paketmetadaten
 

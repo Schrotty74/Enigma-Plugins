@@ -4,7 +4,20 @@
 
 Enigma2-Systeminfo-Plugin von Schrotty74 im Repository `Schrotty74/Enigma-Plugins`. Vollständiger Plugin-Bestand unter `plugins/BoxSystemInfo/`; dieser Kontext liegt getrennt unter `context/BoxSystemInfo/`.
 
-## Lokaler Teststand 0.1.10
+## Lokaler Teststand 0.1.11
+
+Arbeitsbranch: `development/boxsysteminfo-0.1.11`. Die sechs beauftragten Ergänzungen sind implementiert und auf dem Receiver installiert. Eine Laufwerksauswahl war ausdrücklich ausgenommen und wurde nicht ergänzt.
+
+- Menü „Verlaufskurven“: SoC-/SSD-Temperaturen und Empfang/Versand der aktiven Netzwerkschnittstelle über die letzten zehn Minuten. Nur echte Messungen mit Zeitstempeln, fehlende Werte als Lücken; SSD-Abfragen behalten ihren bisherigen Takt. Maximal 300 Punkte pro Reihe und 16 Reihen im RAM, keine Dateien oder Messung nach dem Schließen.
+- Drei gespeicherte Übersichtskarten: Temperatur, RAM, Root-Speicher, Aufnahmespeicher und Netzwerk zur Wahl. Standard bleibt Temperatur/RAM/Root; bereits verwendete Karten werden beim Auswählen getauscht.
+- Gespeicherte Hinweisschwellen für SoC (60–95 °C), Laufwerk (40–70 °C), Speicher und RAM (75/80/85/90/95/98 %). Keine Laufwerkseinstellungen oder Herstellergrenzwerte werden verändert.
+- RAM-Detailseite: Gesamt, verfügbar, belegt, MemFree, bereinigter Cache, Puffer und Swap. Die Übersicht verwendet dieselbe Berechnung; Cache nicht zusätzlich zu MemAvailable addieren.
+- Diagnoseexport ausschließlich per Menü: JSON im zur Laufzeit ermittelten temporären Verzeichnis, eindeutiger Dateiname und Modus 0600. Nur Plugin-Version und fest definierte numerische CPU-, RAM-, Root-/Aufnahmespeicher- und Temperaturwerte; keine Namen, Adressen, Seriennummern, Pfade oder Rohprotokolle im Bericht. Kein Versand.
+- Manuelle Update-Prüfung ausschließlich per Menü: Metadaten der letzten bis zu 100 GitHub-Releases im offiziellen Repository. Nur veröffentlichte, nicht als Vorabversion markierte BoxSystemInfo-Tags mit passendem ARMv7-IPK zählen. Begrenzter separater Prozess; keine Installation und kein Paketdownload.
+
+95 Tests, Paketbau und Datenschutzprüfung sind erfolgreich. Installierte Python-Quellen und IPK stimmen mit dem lokalen Stand überein. IPK-SHA256: `dbc83716e920e190f4b6c03633dd75435e9e981b2711c5b5e8994d3ebad6f71b`. Die GUI-Prüfung ist erfolgreich: Kurven, RAM-Seite, Kartenwechsel, Warnschwellen und Update-Hinweis funktionieren. Englische Verlaufsbeschriftungen wurden geprüft. Ein über die Oberfläche erzeugter Diagnosebericht wurde auf numerische Felder und Modus 0600 geprüft und anschließend gelöscht. Persönlicher Nutzertest und ausdrückliche Veröffentlichungsfreigabe für 0.1.11 stehen aus. 0.1.9 bleibt das neueste öffentliche IPK.
+
+## Vorheriger Teststand 0.1.10
 
 Die fünf beauftragten Erweiterungen sind implementiert und als IPK auf dem Receiver installiert. Die allgemeine Kartenübersicht bleibt der Startbildschirm.
 

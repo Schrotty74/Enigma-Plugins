@@ -388,3 +388,126 @@ msgstr "SSD-Zustand und Fehlerwerte"
 msgid "SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt."
 msgstr "SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt."
 
+msgid "Akzent: Empfang %s    Blau: Versand %s    −10 Min. → Jetzt"
+msgstr "Akzent: Empfang %s    Blau: Versand %s    −10 Min. → Jetzt"
+
+msgid "Akzent: SoC %s    Gelb: SSD %s    −10 Min. → Jetzt"
+msgstr "Akzent: SoC %s    Gelb: SSD %s    −10 Min. → Jetzt"
+
+msgid "Arbeitsspeicher und Swap"
+msgstr "Arbeitsspeicher und Swap"
+
+msgid "Aufnahmespeicher"
+msgstr "Aufnahmespeicher"
+
+msgid "Belegt ohne verfügbaren RAM"
+msgstr "Belegt ohne verfügbaren RAM"
+
+msgid "Cache, bereinigt"
+msgstr "Cache, bereinigt"
+
+msgid "Diagnosebericht exportieren"
+msgstr "Diagnosebericht exportieren"
+
+msgid "Diagnosebericht gespeichert:\n%s\n\nEnthält nur Plugin-Version und freigegebene Messwerte. Es werden keine Daten versendet."
+msgstr "Diagnosebericht gespeichert:\n%s\n\nEnthält nur Plugin-Version und freigegebene Messwerte. Es werden keine Daten versendet."
+
+msgid "Diagnosebericht konnte nicht gespeichert werden."
+msgstr "Diagnosebericht konnte nicht gespeichert werden."
+
+msgid "Empfang %s"
+msgstr "Empfang %s"
+
+msgid "Freigegebene Plugin-Versionen werden auf GitHub geprüft …"
+msgstr "Freigegebene Plugin-Versionen werden auf GitHub geprüft …"
+
+msgid "Inhalt der Karte"
+msgstr "Inhalt der Karte"
+
+msgid "Karte %d: %s"
+msgstr "Karte %d: %s"
+
+msgid "Kein neueres freigegebenes ARMv7-Paket gefunden. Installierte Version: %s"
+msgstr "Kein neueres freigegebenes ARMv7-Paket gefunden. Installierte Version: %s"
+
+msgid "Nach Plugin-Updates suchen"
+msgstr "Nach Plugin-Updates suchen"
+
+msgid "Netzwerk %s · Skala 0–%.2f Mbit/s"
+msgstr "Netzwerk %s · Skala 0–%.2f Mbit/s"
+
+msgid "Neue freigegebene Plugin-Version: %s\n\nEs wird nichts automatisch installiert.\nGitHub: Schrotty74/Enigma-Plugins → Releases"
+msgstr "Neue freigegebene Plugin-Version: %s\n\nEs wird nichts automatisch installiert.\nGitHub: Schrotty74/Enigma-Plugins → Releases"
+
+msgid "Nur diese Sitzung; Messlücken bleiben offen. SSD-Werte werden seltener gelesen."
+msgstr "Nur diese Sitzung; Messlücken bleiben offen. SSD-Werte werden seltener gelesen."
+
+msgid "OK Aktualisieren    GRÜN Theme    MENU Optionen    EXIT Zurück"
+msgstr "OK Aktualisieren    GRÜN Theme    MENU Optionen    EXIT Zurück"
+
+msgid "Puffer"
+msgstr "Puffer"
+
+msgid "RAM gesamt"
+msgstr "RAM gesamt"
+
+msgid "RAM-Belegung"
+msgstr "RAM-Belegung"
+
+msgid "SoC-Temperatur"
+msgstr "SoC-Temperatur"
+
+msgid "Startübersicht anpassen"
+msgstr "Startübersicht anpassen"
+
+msgid "Swap belegt"
+msgstr "Swap belegt"
+
+msgid "Swap frei"
+msgstr "Swap frei"
+
+msgid "Swap gesamt"
+msgstr "Swap gesamt"
+
+msgid "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details; dort Hoch/Runter zum Blättern\nOK: aktualisieren; Exit: zurück oder schließen\nMENU: Karten, Warnschwellen, Sprache, Intervall, Verlauf, Diagnoseexport und Update-Prüfung\n\nVerlauf nur im RAM für diese Sitzung. SMART automatisch höchstens einmal pro Minute. Warnschwellen sind Hinweise, keine Herstellergrenzwerte. Systemlast ist keine CPU-Prozentanzeige. AGC ist ein relativer Treiberwert; nicht erkannte Tuner-Nutzung bedeutet nicht frei."
+msgstr "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details; dort Hoch/Runter zum Blättern\nOK: aktualisieren; Exit: zurück oder schließen\nMENU: Karten, Warnschwellen, Sprache, Intervall, Verlauf, Diagnoseexport und Update-Prüfung\n\nVerlauf nur im RAM für diese Sitzung. SMART automatisch höchstens einmal pro Minute. Warnschwellen sind Hinweise, keine Herstellergrenzwerte. Systemlast ist keine CPU-Prozentanzeige. AGC ist ein relativer Treiberwert; nicht erkannte Tuner-Nutzung bedeutet nicht frei."
+
+msgid "Temperaturen · Skala 0–%.0f °C"
+msgstr "Temperaturen · Skala 0–%.0f °C"
+
+msgid "Unbenutzt (MemFree)"
+msgstr "Unbenutzt (MemFree)"
+
+msgid "Update-Prüfung fehlgeschlagen. Netzwerkverbindung und Zertifikate prüfen oder später erneut versuchen."
+msgstr "Update-Prüfung fehlgeschlagen. Netzwerkverbindung und Zertifikate prüfen oder später erneut versuchen."
+
+msgid "Update-Prüfung läuft bereits."
+msgstr "Update-Prüfung läuft bereits."
+
+msgid "Verfügbarer RAM umfasst rückgewinnbaren Speicher. Cache ist nicht zusätzlich zu addieren."
+msgstr "Verfügbarer RAM umfasst rückgewinnbaren Speicher. Cache ist nicht zusätzlich zu addieren."
+
+msgid "Verlauf der letzten 10 Minuten"
+msgstr "Verlauf der letzten 10 Minuten"
+
+msgid "Verlaufskurven"
+msgstr "Verlaufskurven"
+
+msgid "Versand %s"
+msgstr "Versand %s"
+
+msgid "Warnschwellen"
+msgstr "Warnschwellen"
+
+msgid "Warnung ab"
+msgstr "Warnung ab"
+
+msgid "Blau"
+msgstr "Blau"
+
+msgid "Gelb"
+msgstr "Gelb"
+
+msgid "Akzent: SoC %s    %s: SSD %s    −10 Min. → Jetzt"
+msgstr "Akzent: SoC %s    %s: SSD %s    −10 Min. → Jetzt"
+

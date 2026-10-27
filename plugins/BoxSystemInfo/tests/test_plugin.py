@@ -22,8 +22,12 @@ M = types.ModuleType('plugin_helpers')
 smart_spec = importlib.util.spec_from_file_location('smart_helpers', str(SOURCE.parent / 'smart.py'))
 smart_helpers = importlib.util.module_from_spec(smart_spec)
 smart_spec.loader.exec_module(smart_helpers)
+metrics_spec = importlib.util.spec_from_file_location('metrics_helpers', str(SOURCE.parent / 'metrics.py'))
+metrics_helpers = importlib.util.module_from_spec(metrics_spec)
+metrics_spec.loader.exec_module(metrics_helpers)
 M.__dict__.update(os=os, glob=glob, re=re, time=time, json=json, __file__=str(SOURCE),
-                  _=lambda text: text, parse_smart_wear=smart_helpers.parse_smart_wear)
+                  _=lambda text: text, parse_smart_wear=smart_helpers.parse_smart_wear,
+                  parse_memory=metrics_helpers.parse_memory, SessionHistory=metrics_helpers.SessionHistory)
 exec(compile(ast.Module(body=NODES, type_ignores=[]), str(SOURCE), 'exec'), M.__dict__)
 
 # Only the temperature table header/row from the observed device; no identifiers.

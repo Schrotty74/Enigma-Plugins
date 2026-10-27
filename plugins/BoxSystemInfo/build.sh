@@ -5,7 +5,7 @@ WORK=$(mktemp -d "$ROOT/.build.XXXXXX")
 trap 'rm -rf "$WORK"' EXIT HUP INT TERM
 python3 "$ROOT/tools/compile-translations.py"
 DIST="$ROOT/dist"
-VERSION="0.1.10"
+VERSION="0.1.11"
 mkdir -p "$DIST"
 python3 - "$ROOT" "$WORK" "$DIST" "$VERSION" <<'PY'
 import gzip

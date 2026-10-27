@@ -1,9 +1,10 @@
 # BoxSystemInfo: Nächste Schritte
 
-0.1.10 ist als lokaler Testbuild implementiert und installiert; 67 technische Tests und Paketbau sind erfolgreich. Die GUI-Prüfung ist erfolgreich: Übersicht und Details, Sprachwahl und Intervallauswahl wurden auf dem Receiver kontrolliert. 0.1.9 bleibt das neueste freigegebene öffentliche IPK.
+0.1.11 ist implementiert und auf dem Receiver installiert; 95 Tests, Paketbau und Datenschutzprüfung sind erfolgreich. Die GUI-Prüfung ist erfolgreich: Kurven, RAM-Seite, Kartenwechsel, Warnschwellen und Update-Hinweis funktionieren. Englische Verlaufsbeschriftungen wurden geprüft. Ein über die Oberfläche erzeugter Diagnosebericht wurde auf numerische Felder und Modus 0600 geprüft und anschließend gelöscht. 0.1.9 bleibt das neueste öffentliche IPK.
 
-Der Nutzer hat den persönlichen Test von 0.1.10 mit „funktioniert gut“ bestätigt. Offen bleibt ausschließlich die ausdrückliche Freigabe zur Veröffentlichung der IPK.
-- 0.1.10-IPK erst nach persönlichem Test und ausdrücklicher Veröffentlichungsfreigabe hochladen. Dann Release-Dokumentation und Kontext von Teststand auf öffentlichen Stand umstellen.
+- Persönlichen Nutzertest von 0.1.11 abwarten: Verlauf, Kartenauswahl, Warnschwellen, RAM-Seite, Diagnoseexport und manuelle Update-Prüfung.
+- 0.1.11-IPK erst nach persönlichem Test und ausdrücklicher Veröffentlichungsfreigabe hochladen. Dann Release-Dokumentation und Kontext auf den öffentlichen Stand umstellen.
+- 0.1.10 wurde vom Nutzer erfolgreich getestet, aber nicht ausdrücklich zur Veröffentlichung freigegeben.
 
 - Git-/Release-Stand `boxsysteminfo-v0.1.9` bei Fortsetzung prüfen; vollständige Quellen, beide READMEs, englischen Changelog und die Kontextdateien zusammen halten.
 - OpenATV, weitere Receiver und Python 2 sind noch praktisch ungeprüft. Solche Prüfungen nur bei passendem Auftrag bzw. verfügbarer Zielumgebung durchführen; keine pauschale Kompatibilität behaupten.

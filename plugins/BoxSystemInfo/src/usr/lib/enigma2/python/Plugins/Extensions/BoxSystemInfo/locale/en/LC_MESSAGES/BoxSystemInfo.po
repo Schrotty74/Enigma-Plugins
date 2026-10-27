@@ -388,3 +388,126 @@ msgstr "SSD health and error counters"
 msgid "SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt."
 msgstr "SMART values depend on the drive model; missing remaining lifetime is not estimated."
 
+msgid "Akzent: Empfang %s    Blau: Versand %s    −10 Min. → Jetzt"
+msgstr "Accent: receive %s    Blue: send %s    −10 min → Now"
+
+msgid "Akzent: SoC %s    Gelb: SSD %s    −10 Min. → Jetzt"
+msgstr "Accent: SoC %s    Yellow: SSD %s    −10 min → Now"
+
+msgid "Arbeitsspeicher und Swap"
+msgstr "Memory and swap"
+
+msgid "Aufnahmespeicher"
+msgstr "Recording storage"
+
+msgid "Belegt ohne verfügbaren RAM"
+msgstr "Used (excluding available)"
+
+msgid "Cache, bereinigt"
+msgstr "Adjusted cache"
+
+msgid "Diagnosebericht exportieren"
+msgstr "Export diagnostic report"
+
+msgid "Diagnosebericht gespeichert:\n%s\n\nEnthält nur Plugin-Version und freigegebene Messwerte. Es werden keine Daten versendet."
+msgstr "Diagnostic report saved:\n%s\n\nContains only the plugin version and allowlisted metrics. No data is sent."
+
+msgid "Diagnosebericht konnte nicht gespeichert werden."
+msgstr "Could not save diagnostic report."
+
+msgid "Empfang %s"
+msgstr "Receive %s"
+
+msgid "Freigegebene Plugin-Versionen werden auf GitHub geprüft …"
+msgstr "Checking published plugin versions on GitHub …"
+
+msgid "Inhalt der Karte"
+msgstr "Card content"
+
+msgid "Karte %d: %s"
+msgstr "Card %d: %s"
+
+msgid "Kein neueres freigegebenes ARMv7-Paket gefunden. Installierte Version: %s"
+msgstr "No newer published ARMv7 package found. Installed version: %s"
+
+msgid "Nach Plugin-Updates suchen"
+msgstr "Check for plugin updates"
+
+msgid "Netzwerk %s · Skala 0–%.2f Mbit/s"
+msgstr "Network %s · Scale 0–%.2f Mbit/s"
+
+msgid "Neue freigegebene Plugin-Version: %s\n\nEs wird nichts automatisch installiert.\nGitHub: Schrotty74/Enigma-Plugins → Releases"
+msgstr "New published plugin version: %s\n\nNothing is installed automatically.\nGitHub: Schrotty74/Enigma-Plugins → Releases"
+
+msgid "Nur diese Sitzung; Messlücken bleiben offen. SSD-Werte werden seltener gelesen."
+msgstr "This session only; missing samples leave gaps. SSD values are read less frequently."
+
+msgid "OK Aktualisieren    GRÜN Theme    MENU Optionen    EXIT Zurück"
+msgstr "OK Refresh    GREEN Theme    MENU Options    EXIT Back"
+
+msgid "Puffer"
+msgstr "Buffers"
+
+msgid "RAM gesamt"
+msgstr "Total RAM"
+
+msgid "RAM-Belegung"
+msgstr "Memory usage"
+
+msgid "SoC-Temperatur"
+msgstr "SoC temperature"
+
+msgid "Startübersicht anpassen"
+msgstr "Customize overview"
+
+msgid "Swap belegt"
+msgstr "Used swap"
+
+msgid "Swap frei"
+msgstr "Free swap"
+
+msgid "Swap gesamt"
+msgstr "Total swap"
+
+msgid "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details; dort Hoch/Runter zum Blättern\nOK: aktualisieren; Exit: zurück oder schließen\nMENU: Karten, Warnschwellen, Sprache, Intervall, Verlauf, Diagnoseexport und Update-Prüfung\n\nVerlauf nur im RAM für diese Sitzung. SMART automatisch höchstens einmal pro Minute. Warnschwellen sind Hinweise, keine Herstellergrenzwerte. Systemlast ist keine CPU-Prozentanzeige. AGC ist ein relativer Treiberwert; nicht erkannte Tuner-Nutzung bedeutet nicht frei."
+msgstr "System information for Enigma2.\n\nLeft/Right or Green: change theme\nYellow/Blue: details; Up/Down to change page\nOK: refresh; Exit: back or close\nMENU: cards, warning thresholds, language, interval, history, diagnostic export and update check\n\nHistory stays in RAM for this session only. Automatic SMART queries run at most once per minute. Warning thresholds are advisory, not manufacturer limits. Load averages are not CPU usage percentages. AGC is a relative driver value; unobserved tuner use does not mean free."
+
+msgid "Temperaturen · Skala 0–%.0f °C"
+msgstr "Temperatures · Scale 0–%.0f °C"
+
+msgid "Unbenutzt (MemFree)"
+msgstr "Unused (MemFree)"
+
+msgid "Update-Prüfung fehlgeschlagen. Netzwerkverbindung und Zertifikate prüfen oder später erneut versuchen."
+msgstr "Update check failed. Check the network connection and certificates, or try again later."
+
+msgid "Update-Prüfung läuft bereits."
+msgstr "Update check is already running."
+
+msgid "Verfügbarer RAM umfasst rückgewinnbaren Speicher. Cache ist nicht zusätzlich zu addieren."
+msgstr "Available RAM includes reclaimable memory. Do not add cache to it again."
+
+msgid "Verlauf der letzten 10 Minuten"
+msgstr "History over the last 10 minutes"
+
+msgid "Verlaufskurven"
+msgstr "History charts"
+
+msgid "Versand %s"
+msgstr "Send %s"
+
+msgid "Warnschwellen"
+msgstr "Warning thresholds"
+
+msgid "Warnung ab"
+msgstr "Warn at"
+
+msgid "Blau"
+msgstr "Blue"
+
+msgid "Gelb"
+msgstr "Yellow"
+
+msgid "Akzent: SoC %s    %s: SSD %s    −10 Min. → Jetzt"
+msgstr "Accent: SoC %s    %s: SSD %s    −10 min → Now"
+
