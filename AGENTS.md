@@ -11,6 +11,9 @@
 - Keine zusätzlichen Test-Apps oder globalen Umgebungsänderungen ohne ausdrücklichen Auftrag. Bestehende Dateien nicht nebenbei bereinigen. Eigene temporäre Dateien nach Verwendung entfernen.
 - Aktuelles Plugin: [BoxSystemInfo-Regeln](context/BoxSystemInfo/AGENTS.md), [Bauanleitung](plugins/BoxSystemInfo/BUILDING.md).
 
+
+- Ausnahme auf ausdrücklichen Nutzerauftrag: Die zwölf einzeln auf private Inhalte geprüften Screenshots zu 0.1.11 unter `plugins/BoxSystemInfo/docs/screenshots/` dürfen als Galerie veröffentlicht werden. Diese Ausnahme gilt nur für diese Aufnahmen; private Daten bleiben ausgeschlossen.
+
 ## Sprachen
 
 `README.md` ist die englische Standardfassung, `README.de.md` die deutsche Fassung. Beide müssen sich gegenseitig verlinken und denselben fachlichen Stand beschreiben, sowohl im Repository-Stamm als auch pro Plugin. Changelogs ausschließlich auf Englisch in `CHANGELOG.md` führen; deutsche READMEs verlinken darauf. Beide Sprachfassungen bei Funktionsänderungen gemeinsam aktualisieren.

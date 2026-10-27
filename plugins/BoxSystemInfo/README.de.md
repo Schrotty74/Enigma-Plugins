@@ -8,6 +8,10 @@ Box Systeminfo zeigt Receiver-, Speicher-, Temperatur- und Image-Daten auf einem
 
 [0.1.11 herunterladen und Versionshinweise lesen](https://github.com/Schrotty74/Enigma-Plugins/releases/tag/boxsysteminfo-v0.1.11).
 
+## Screenshots
+
+[Galerie mit allen 12 Screenshots öffnen](GALLERY.de.md): Übersicht, Detailseiten, Verlaufskurven und Optionen.
+
 ## Funktionen
 
 - **Anpassbare Übersicht:** drei gespeicherte Karten aus Temperaturen, RAM, Root-Speicher, Aufnahmespeicher und Netzwerk. Bereits verwendete Karten tauschen ihren Platz.

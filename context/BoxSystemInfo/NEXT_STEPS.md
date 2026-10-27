@@ -13,3 +13,7 @@ Bisherige Releases nicht überschreiben oder löschen. Keine zusätzlichen Funkt
 ## README-Aufteilung
 
 Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.
+
+## Galeriepflege
+
+Die zwölf Screenshots von 0.1.11 sind geprüft und vom Nutzer zur Veröffentlichung als Galerie freigegeben. Bei späteren Oberflächenänderungen beide Galerieseiten und deren README-Links gemeinsam pflegen; neue Aufnahmen vor Veröffentlichung erneut auf private Inhalte und Metadaten prüfen. Für diese Dokumentationsänderung wird kein neues IPK erstellt.

@@ -15,3 +15,7 @@ Diese Regeln gelten für `plugins/BoxSystemInfo/` und den zugehörigen Kontextor
 ## README-Aufteilung
 
 Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.
+
+## Freigegebene Bildergalerie
+
+Der Nutzer hat die Veröffentlichung der zwölf Screenshots von 0.1.11 ausdrücklich beauftragt. Alle Bilder wurden visuell und ihre PNG-Metadaten auf private Daten geprüft. Für diese Aufnahmen gilt eine Ausnahme vom allgemeinen Verbot, Laufzeit-Screenshots zu veröffentlichen. Galerie: `plugins/BoxSystemInfo/GALLERY.md` und `GALLERY.de.md`; Originalbilder unter `docs/screenshots/`. Andere Aufnahmen benötigen weiterhin eine gesonderte Prüfung und einen entsprechenden Nutzerauftrag.

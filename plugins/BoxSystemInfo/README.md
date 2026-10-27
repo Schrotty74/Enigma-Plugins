@@ -8,6 +8,10 @@ Box Systeminfo displays receiver, storage, temperature and image information on 
 
 [Download 0.1.11 and read the release notes](https://github.com/Schrotty74/Enigma-Plugins/releases/tag/boxsysteminfo-v0.1.11).
 
+## Screenshots
+
+[Open the gallery with all 12 screenshots](GALLERY.md): overview, detail pages, history charts and options.
+
 ## Features
 
 - **Customizable overview:** three saved cards chosen from temperatures, RAM, root storage, recording storage and network. Selecting an existing card swaps its position.
