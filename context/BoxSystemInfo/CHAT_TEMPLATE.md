@@ -19,3 +19,5 @@ README.md ist Englisch, README.de.md Deutsch; beide verlinken sich gegenseitig. 
 Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.
 
 Die englische und deutsche Bildergalerie liegen unter `plugins/BoxSystemInfo/GALLERY.md` und `GALLERY.de.md`. Die zwölf Bilder unter `docs/screenshots/` sind auf ausdrücklichen Nutzerauftrag für die Veröffentlichung geprüft. Die übrigen Datenschutzregeln gelten unverändert.
+
+Bei neuen Funktionen nur die Screenshots veränderter Seiten erneuern und neue Seiten ergänzen. Unveränderte Bilder behalten. Neue Aufnahmen zunächst lokal bereithalten; erst nach persönlichem IPK-Test und ausdrücklichem Upload-Auftrag gemeinsam mit der IPK und den Galerieänderungen veröffentlichen. Vor jedem Upload Bilder und Metadaten auf private Daten prüfen.

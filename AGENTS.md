@@ -12,7 +12,7 @@
 - Aktuelles Plugin: [BoxSystemInfo-Regeln](context/BoxSystemInfo/AGENTS.md), [Bauanleitung](plugins/BoxSystemInfo/BUILDING.md).
 
 
-- Ausnahme auf ausdrücklichen Nutzerauftrag: Die zwölf einzeln auf private Inhalte geprüften Screenshots zu 0.1.11 unter `plugins/BoxSystemInfo/docs/screenshots/` dürfen als Galerie veröffentlicht werden. Diese Ausnahme gilt nur für diese Aufnahmen; private Daten bleiben ausgeschlossen.
+- Ausnahme für Bildergalerien: Auf ausdrücklichen Nutzerauftrag dürfen auf private Inhalte und Metadaten geprüfte Screenshots veröffentlicht werden. Die zwölf Galerieaufnahmen zu 0.1.11 sind bereits freigegeben; für neue Aufnahmen gilt der nachstehende Ablauf. Private Daten bleiben ausgeschlossen.
 
 ## Sprachen
 
@@ -21,3 +21,10 @@
 ## Plugin-Seiten
 
 Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschreibung und Link. Ausführliche Angaben einschließlich Icon, Funktionen, Bedienung, Installation und Bauanleitung gehören auf die eigenen englischen/deutschen README-Seiten jedes Plugins. Bestehende Detailinformationen bei Sprachänderungen erhalten.
+
+## Screenshots bei neuen Funktionen
+
+- Bei neuen Funktionen die Screenshots der inhaltlich oder optisch veränderten Seiten neu erstellen; neue Seiten ergänzen und unveränderte Aufnahmen behalten.
+- Neue Aufnahmen zunächst nur lokal unter `.local/` bereithalten. Sie dürfen nicht schon mit einem vorgezogenen Quellcode-Push veröffentlicht werden.
+- Erst nach persönlichem Test der zugehörigen IPK und ausdrücklichem Upload-Auftrag des Nutzers die erneuerten Bilder gemeinsam mit der IPK veröffentlichen. Dieser Auftrag umfasst auch die zugehörige Galerieaktualisierung; keine zusätzliche Freigabe für dieselben Bilder verlangen.
+- Vor dem gemeinsamen Upload Bilder visuell und deren Metadaten auf private Daten prüfen sowie beide Galerieseiten und README-Verweise bei Bedarf aktualisieren.

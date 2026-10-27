@@ -16,4 +16,4 @@ Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschre
 
 ## Galeriepflege
 
-Die zwölf Screenshots von 0.1.11 sind geprüft und vom Nutzer zur Veröffentlichung als Galerie freigegeben. Bei späteren Oberflächenänderungen beide Galerieseiten und deren README-Links gemeinsam pflegen; neue Aufnahmen vor Veröffentlichung erneut auf private Inhalte und Metadaten prüfen. Für diese Dokumentationsänderung wird kein neues IPK erstellt.
+Die zwölf Screenshots von 0.1.11 sind geprüft und vom Nutzer zur Veröffentlichung als Galerie freigegeben. Bei neuen Funktionen nur veränderte Seiten neu aufnehmen und neue Seiten ergänzen; unveränderte Bilder behalten. Neue Aufnahmen lokal bereithalten und erst nach persönlichem Test und ausdrücklichem IPK-Upload-Auftrag gemeinsam mit der IPK veröffentlichen. Vorher erneut private Inhalte und Metadaten prüfen und beide Galerieseiten sowie ihre README-Links pflegen. Für diese Dokumentationsänderung wird kein neues IPK erstellt.

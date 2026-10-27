@@ -66,3 +66,5 @@ Die Repository-Startseite bleibt ein kurzer Plugin-Katalog mit Icon, Kurzbeschre
 ## Bildergalerie
 
 Auf ausdrücklichen Nutzerauftrag sind zwölf unveränderte, auf private Inhalte und PNG-Metadaten geprüfte Screenshots von 0.1.11 als Galerie enthalten. Englisch: [GALLERY.md](../../plugins/BoxSystemInfo/GALLERY.md), Deutsch: [GALLERY.de.md](../../plugins/BoxSystemInfo/GALLERY.de.md). Beide READMEs verlinken die Galerie. Übersicht, sieben Detailseiten, Optionen, Verlauf, Kartenauswahl und Warnschwellen sind mit vergrößerbaren Vorschaubildern vertreten. Das freigegebene IPK bleibt unverändert.
+
+Für künftige Erweiterungen gilt der Nutzerauftrag: Nur Screenshots veränderter Seiten erneuern und neue Seiten ergänzen. Die neuen Bilder bleiben bis zum persönlichen IPK-Test und ausdrücklichen Upload-Auftrag lokal. Dann Galerie und Bilder nach Datenschutzprüfung gemeinsam mit der getesteten IPK veröffentlichen; unveränderte Aufnahmen bleiben erhalten.
