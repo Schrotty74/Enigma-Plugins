@@ -1,5 +1,5 @@
 Package: enigma2-plugin-extensions-boxsysteminfo
-Version: 0.1.9
+Version: 0.1.10
 Description: Lightweight receiver and Enigma2 image information plugin with selectable themes
 Section: extra
 Priority: optional

@@ -4,7 +4,22 @@
 
 Enigma2-Systeminfo-Plugin von Schrotty74 im Repository `Schrotty74/Enigma-Plugins`. Vollständiger Plugin-Bestand unter `plugins/BoxSystemInfo/`; dieser Kontext liegt getrennt unter `context/BoxSystemInfo/`.
 
-## Stand 0.1.9
+## Lokaler Teststand 0.1.10
+
+Die fünf beauftragten Erweiterungen sind implementiert und als IPK auf dem Receiver installiert. Die allgemeine Kartenübersicht bleibt der Startbildschirm.
+
+- SMART: zusätzliche erlaubte Fehlerzähler, Reserveplatz und Schreibmengen; Restlebensdauer nur bei eindeutigem Prozentattribut. Aus dem mehrdeutigen Media_Wearout_Indicator wird kein Prozentwert abgeleitet.
+- Netzwerk: Empfang und Versand in Mbit/s aus zwei zeitversetzten sysfs-Zählerständen, ohne Internetabfrage.
+- Aktiver DVB-Tuner: Signalqualität in dB oder relativem Prozentwert, AGC, BER und Lock. Nur den laufenden Dienst lesen, keine Tuner reservieren oder umschalten. Nicht unterstützte Werte bleiben nicht verfügbar.
+- Automatische Aktualisierung nur bei geöffnetem Plugin: standardmäßig 5 Sekunden, Menüauswahl Aus/2/5/10/30 Sekunden. Automatische SMART-Abfragen höchstens einmal pro Minute; OK liest sofort neu. Laufende Abfragen werden bei automatischen Aktualisierungen nicht neu gestartet.
+- Deutsch/Englisch über GNU-gettext-Kataloge; automatisch anhand der Image-Sprache mit englischem Fallback, im Menü überschreibbar. PO-Quellen und MO-Dateien sind enthalten. Der Paketbau kompiliert sie mit einem Python-3-Skript ohne zusätzliche Pakete.
+- 67 Tests und Paketbau erfolgreich. Die auf dem Receiver installierten Python-Quellen sind bytegleich mit diesem Quellstand; ihre Syntax wurde mit dem Receiver-Python geprüft. Die GUI-Prüfung ist erfolgreich: Übersicht und Detailwerte werden angezeigt; Englisch und Image-Sprache sowie die Intervallauswahl funktionieren. Leere Zeilen und lange Detailbeschriftungen sind auf dem Receiver kontrolliert.
+
+Das endgültige installierte Test-IPK hat SHA256 `3b8395ad40aaf973e567f53281a3dd3656e1b88d50108f728d1ad76a9076beb6`; Paket auf dem Mac und Receiver stimmen überein.
+
+0.1.10 wurde noch nicht vom Nutzer persönlich getestet oder zur Veröffentlichung freigegeben. Kein öffentliches IPK oder Release-Tag dafür anlegen. 0.1.9 bleibt das neueste öffentliche Release.
+
+## Öffentlicher Stand 0.1.9
 
 - Die allgemeine Kartenübersicht ist weiterhin der Startbildschirm: Temperaturen, RAM, Root-Speicher, Receiver und Image-Daten.
 - Gelb öffnet Details zu Aufnahmespeicher/SSD, CPU, Netzwerk und Tuner/Aufnahmen. Hoch/Runter bzw. Gelb/Blau blättert, Exit kehrt zur Übersicht zurück. Links/Rechts bzw. Grün wechselt das gespeicherte Theme.

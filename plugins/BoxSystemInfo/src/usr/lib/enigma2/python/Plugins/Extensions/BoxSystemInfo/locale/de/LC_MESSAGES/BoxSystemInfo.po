@@ -1,0 +1,390 @@
+# Box Systeminfo translations. German source msgids.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: de\n"
+
+msgid " Std."
+msgstr " Std."
+
+msgid " frei"
+msgstr " frei"
+
+msgid "%.0f%%"
+msgstr "%.0f%%"
+
+msgid "%.2f"
+msgstr "%.2f"
+
+msgid "%.2f Mbit/s"
+msgstr "%.2f Mbit/s"
+
+msgid "%d Std., %d Min."
+msgstr "%d Std., %d Min."
+
+msgid "%d Tage, %d Std., %d Min."
+msgstr "%d Tage, %d Std., %d Min."
+
+msgid "%d%%"
+msgstr "%d%%"
+
+msgid "%d%% belegt"
+msgstr "%d%% belegt"
+
+msgid "%s frei von %s"
+msgstr "%s frei von %s"
+
+msgid "%s – Empfangen"
+msgstr "%s – Empfangen"
+
+msgid "%s – Gesendet"
+msgstr "%s – Gesendet"
+
+msgid "AGC"
+msgstr "AGC"
+
+msgid "Abfragepfad"
+msgstr "Abfragepfad"
+
+msgid "Aktiv"
+msgstr "Aktiv"
+
+msgid "Aktualisiert"
+msgstr "Aktualisiert"
+
+msgid "Aktualisierung: %s"
+msgstr "Aktualisierung: %s"
+
+msgid "Aktueller Takt"
+msgstr "Aktueller Takt"
+
+msgid "Arbeitsspeicher"
+msgstr "Arbeitsspeicher"
+
+msgid "Architektur"
+msgstr "Architektur"
+
+msgid "Aufnahme"
+msgstr "Aufnahme"
+
+msgid "Aufnahmen (Timer)"
+msgstr "Aufnahmen (Timer)"
+
+msgid "Aufnahmespeicher und Laufwerk"
+msgstr "Aufnahmespeicher und Laufwerk"
+
+msgid "Aufnahmespeicher und SMART-Gerät können unterschiedlich sein, etwa bei Netzwerkaufnahmen."
+msgstr "Aufnahmespeicher und SMART-Gerät können unterschiedlich sein, etwa bei Netzwerkaufnahmen."
+
+msgid "Aus"
+msgstr "Aus"
+
+msgid "Ausstehende Sektoren"
+msgstr "Ausstehende Sektoren"
+
+msgid "Automatische Aktualisierung"
+msgstr "Automatische Aktualisierung"
+
+msgid "BER"
+msgstr "BER"
+
+msgid "Belegt"
+msgstr "Belegt"
+
+msgid "Belegte Frontends"
+msgstr "Belegte Frontends"
+
+msgid "Bestanden"
+msgstr "Bestanden"
+
+msgid "Betriebsstunden"
+msgstr "Betriebsstunden"
+
+msgid "Box Systeminfo · Optionen"
+msgstr "Box Systeminfo · Optionen"
+
+msgid "Datenpfadfehler"
+msgstr "Datenpfadfehler"
+
+msgid "Einhängepunkt"
+msgstr "Einhängepunkt"
+
+msgid "FBC umfasst virtuelle Frontends. Nicht erkannte Nutzung bedeutet nicht automatisch frei."
+msgstr "FBC umfasst virtuelle Frontends. Nicht erkannte Nutzung bedeutet nicht automatisch frei."
+
+msgid "Fehlgeschlagen"
+msgstr "Fehlgeschlagen"
+
+msgid "Frei"
+msgstr "Frei"
+
+msgid "Gemeldete Lesefehler"
+msgstr "Gemeldete Lesefehler"
+
+msgid "Geschrieben (Host)"
+msgstr "Geschrieben (Host)"
+
+msgid "Geschrieben (SLC)"
+msgstr "Geschrieben (SLC)"
+
+msgid "Geschrieben (TLC)"
+msgstr "Geschrieben (TLC)"
+
+msgid "Getrennt"
+msgstr "Getrennt"
+
+msgid "Hilfe"
+msgstr "Hilfe"
+
+msgid "Image erstellt"
+msgstr "Image erstellt"
+
+msgid "Image und System"
+msgstr "Image und System"
+
+msgid "Image-Sprache"
+msgstr "Image-Sprache"
+
+msgid "Image-Version"
+msgstr "Image-Version"
+
+msgid "Ja"
+msgstr "Ja"
+
+msgid "Kapazität"
+msgstr "Kapazität"
+
+msgid "Kein Aufnahmepfad ermittelt"
+msgstr "Kein Aufnahmepfad ermittelt"
+
+msgid "Kein Laufwerk gefunden"
+msgstr "Kein Laufwerk gefunden"
+
+msgid "Kein eigener Aufnahmespeicher eingehängt"
+msgstr "Kein eigener Aufnahmespeicher eingehängt"
+
+msgid "Keine Fehler gemeldet"
+msgstr "Keine Fehler gemeldet"
+
+msgid "Keine SMART-Temperaturdaten"
+msgstr "Keine SMART-Temperaturdaten"
+
+msgid "Keine Temperaturdaten"
+msgstr "Keine Temperaturdaten"
+
+msgid "Keine aktive Nutzung erkannt"
+msgstr "Keine aktive Nutzung erkannt"
+
+msgid "Kerne"
+msgstr "Kerne"
+
+msgid "Konfigurierte Tuner"
+msgstr "Konfigurierte Tuner"
+
+msgid "Laufende Aufnahmen"
+msgstr "Laufende Aufnahmen"
+
+msgid "Laufwerk im Standby"
+msgstr "Laufwerk im Standby"
+
+msgid "Laufwerksmodell"
+msgstr "Laufwerksmodell"
+
+msgid "Laufwerkstemperatur"
+msgstr "Laufwerkstemperatur"
+
+msgid "Löschfehler"
+msgstr "Löschfehler"
+
+msgid "Maximaler Takt"
+msgstr "Maximaler Takt"
+
+msgid "Medienfehler"
+msgstr "Medienfehler"
+
+msgid "Modell"
+msgstr "Modell"
+
+msgid "Nein"
+msgstr "Nein"
+
+msgid "Netzwerk"
+msgstr "Netzwerk"
+
+msgid "Netzwerk / virtuell"
+msgstr "Netzwerk / virtuell"
+
+msgid "Nicht eindeutig"
+msgstr "Nicht eindeutig"
+
+msgid "Nicht korrigierbare Sektoren"
+msgstr "Nicht korrigierbare Sektoren"
+
+msgid "Nicht unterscheidbar"
+msgstr "Nicht unterscheidbar"
+
+msgid "Nicht verfügbar"
+msgstr "Nicht verfügbar"
+
+msgid "Nur lesbar"
+msgstr "Nur lesbar"
+
+msgid "Programmierfehler"
+msgstr "Programmierfehler"
+
+msgid "Prozessor"
+msgstr "Prozessor"
+
+msgid "Python-Werkzeug fehlt"
+msgstr "Python-Werkzeug fehlt"
+
+msgid "Receiver"
+msgstr "Receiver"
+
+msgid "Receiver und Image auf einen Blick"
+msgstr "Receiver und Image auf einen Blick"
+
+msgid "Receiver- und Image-Informationen"
+msgstr "Receiver- und Image-Informationen"
+
+msgid "Remappte Ereignisse"
+msgstr "Remappte Ereignisse"
+
+msgid "Remappte Sektoren"
+msgstr "Remappte Sektoren"
+
+msgid "Reserveplatz verfügbar"
+msgstr "Reserveplatz verfügbar"
+
+msgid "Root-Speicher"
+msgstr "Root-Speicher"
+
+msgid "SMART-Abfrage fehlgeschlagen"
+msgstr "SMART-Abfrage fehlgeschlagen"
+
+msgid "SMART-Fehler erkannt"
+msgstr "SMART-Fehler erkannt"
+
+msgid "SMART-Gerät"
+msgstr "SMART-Gerät"
+
+msgid "SMART-Gerätetyp nicht erkannt"
+msgstr "SMART-Gerätetyp nicht erkannt"
+
+msgid "SMART-Gesamtstatus"
+msgstr "SMART-Gesamtstatus"
+
+msgid "SMART-Zeitlimit erreicht"
+msgstr "SMART-Zeitlimit erreicht"
+
+msgid "SSD-Zustand"
+msgstr "SSD-Zustand"
+
+msgid "Signalqualität"
+msgstr "Signalqualität"
+
+msgid "Sonstige"
+msgstr "Sonstige"
+
+msgid "Speicherabfrage fehlgeschlagen"
+msgstr "Speicherabfrage fehlgeschlagen"
+
+msgid "Speicherabfrage: Zeitlimit erreicht"
+msgstr "Speicherabfrage: Zeitlimit erreicht"
+
+msgid "Speicherbelegung"
+msgstr "Speicherbelegung"
+
+msgid "Speicherstatus"
+msgstr "Speicherstatus"
+
+msgid "Sprache"
+msgstr "Sprache"
+
+msgid "Sprache: %s"
+msgstr "Sprache: %s"
+
+msgid "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details öffnen\nIn Details: Hoch/Runter oder Gelb/Blau blättern\nOK: Werte aktualisieren; Exit: schließen\n\nHinweise ab: SoC 80 °C, Laufwerk 60 °C, Speicher 90 % belegt. Das sind Hinweisschwellen, keine Herstellergrenzwerte.\n\nSystemlast ist keine CPU-Prozentanzeige. Tunerbelegung erfasst Live-TV und bekannte Aufnahme-/Streaming-Frontends; unerkannte Nutzung kann bestehen. MENU: Aktualisierung und Sprache einstellen. Automatische Aktualisierung läuft nur bei geöffnetem Plugin; SMART höchstens einmal pro Minute. AGC ist ein Treiberwert, keine kalibrierte Feldstärke. SSD-Verschleiß wird nur bei eindeutigem Attribut angezeigt."
+msgstr "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details öffnen\nIn Details: Hoch/Runter oder Gelb/Blau blättern\nOK: Werte aktualisieren; Exit: schließen\n\nHinweise ab: SoC 80 °C, Laufwerk 60 °C, Speicher 90 % belegt. Das sind Hinweisschwellen, keine Herstellergrenzwerte.\n\nSystemlast ist keine CPU-Prozentanzeige. Tunerbelegung erfasst Live-TV und bekannte Aufnahme-/Streaming-Frontends; unerkannte Nutzung kann bestehen. MENU: Aktualisierung und Sprache einstellen. Automatische Aktualisierung läuft nur bei geöffnetem Plugin; SMART höchstens einmal pro Minute. AGC ist ein Treiberwert, keine kalibrierte Feldstärke. SSD-Verschleiß wird nur bei eindeutigem Attribut angezeigt."
+
+msgid "Systemlast (1/5/15 Min.)"
+msgstr "Systemlast (1/5/15 Min.)"
+
+msgid "Systemlast: Mittelwerte über 1, 5 und 15 Minuten; keine CPU-Auslastung in Prozent."
+msgstr "Systemlast: Mittelwerte über 1, 5 und 15 Minuten; keine CPU-Auslastung in Prozent."
+
+msgid "Systemlaufzeit"
+msgstr "Systemlaufzeit"
+
+msgid "Temperaturen"
+msgstr "Temperaturen"
+
+msgid "Tuner und Aufnahmen"
+msgstr "Tuner und Aufnahmen"
+
+msgid "Tuner-Frontends"
+msgstr "Tuner-Frontends"
+
+msgid "Tuner-Lock"
+msgstr "Tuner-Lock"
+
+msgid "Tunerbelegung"
+msgstr "Tunerbelegung"
+
+msgid "Verbleibende Lebensdauer"
+msgstr "Verbleibende Lebensdauer"
+
+msgid "Verbunden"
+msgstr "Verbunden"
+
+msgid "Verfügbar"
+msgstr "Verfügbar"
+
+msgid "Verschleiß (Percentage Used)"
+msgstr "Verschleiß (Percentage Used)"
+
+msgid "Verschleißgrenze erreicht"
+msgstr "Verschleißgrenze erreicht"
+
+msgid "Wird gelesen …"
+msgstr "Wird gelesen …"
+
+msgid "smartctl fehlt"
+msgstr "smartctl fehlt"
+
+msgid "von "
+msgstr "von "
+
+msgid "Übertragungsfehler"
+msgstr "Übertragungsfehler"
+
+msgid "▲ / ▼ Seite %d/%d    ◀ / ▶ %s    OK Aktualisieren    EXIT Zurück"
+msgstr "▲ / ▼ Seite %d/%d    ◀ / ▶ %s    OK Aktualisieren    EXIT Zurück"
+
+msgid "◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Optionen    EXIT Schließen"
+msgstr "◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Optionen    EXIT Schließen"
+
+msgid "Gemeldete unkorrigierbare Fehler"
+msgstr "Gemeldete unkorrigierbare Fehler"
+
+msgid "Ende-zu-Ende-Fehler"
+msgstr "Ende-zu-Ende-Fehler"
+
+msgid "Verfügbare Reservesektoren"
+msgstr "Verfügbare Reservesektoren"
+
+msgid "Host-Schreibmenge"
+msgstr "Host-Schreibmenge"
+
+msgid "TLC-NAND-Schreibmenge"
+msgstr "TLC-NAND-Schreibmenge"
+
+msgid "SLC-NAND-Schreibmenge"
+msgstr "SLC-NAND-Schreibmenge"
+
+msgid "SSD-Zustand und Fehlerwerte"
+msgstr "SSD-Zustand und Fehlerwerte"
+
+msgid "SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt."
+msgstr "SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt."
+

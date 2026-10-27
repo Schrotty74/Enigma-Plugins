@@ -164,8 +164,9 @@ class ScreenLifecycleTests(unittest.TestCase):
             def setText(self, text): self.text = text
         namespace = M.__dict__.copy()
         namespace.update(Screen=Screen, Label=Label, ActionMap=lambda *args: args[1],
-                         config=types.SimpleNamespace(plugins=types.SimpleNamespace(boxsysteminfo=types.SimpleNamespace(theme=types.SimpleNamespace(value='midnight')))),
-                         cpu_info=lambda: [('Kerne', '2')], network_info=lambda: [('LAN', 'Verbunden')], tuner_info=lambda session: [('Tuner-Frontends', '8')],
+                         config=types.SimpleNamespace(plugins=types.SimpleNamespace(boxsysteminfo=types.SimpleNamespace(theme=types.SimpleNamespace(value='midnight'), refresh_interval=types.SimpleNamespace(value='5')))),
+                         cpu_info=lambda: [('Kerne', '2')], network_info=lambda sampler: [('LAN', 'Verbunden')], tuner_info=lambda session: [('Tuner-Frontends', '8')],
+                         NetworkRates=lambda: object(), active_tuner_info=lambda session: [],
                          _recording_path=lambda: '/recordings/movie', _image_info=lambda: ('Example', '1', ''),
                          _box_model=lambda: 'Example Receiver', _cpu_name=lambda: 'ARM', _memory_info=lambda: ('1 MB / 4 MB', '25% belegt'),
                          _soc_temperature=lambda: '50.0°C', _root_usage=lambda: {'free': 1024, 'total': 4096, 'percent': 75},
@@ -187,11 +188,33 @@ class ScreenLifecycleTests(unittest.TestCase):
         smart.emit('Device Model: Example SSD\nTemperature: 34 Celsius',0)
         self.assertIn('34.0',screen['temperature_detail'].text)
         self.assertEqual(len(screen.detail_pages()),4)
+        # Fast timer ticks retain SMART values and never restart completed work
+        # until its separate one-minute deadline.
+        count = len(Container.instances)
+        screen._automatic_refresh()
+        self.assertEqual(len(Container.instances), count)
+        self.assertIn('34.0', screen['temperature_detail'].text)
+        self.assertTrue(screen._refresh_timer.running)
+        # A due SMART query starts once; further timer ticks leave it running.
+        screen._next_smart_refresh = 0
+        screen._automatic_refresh()
+        pending = Container.instances[-1]
+        count = len(Container.instances)
+        screen._automatic_refresh()
+        self.assertEqual(len(Container.instances), count)
+        self.assertFalse(pending.killed)
+        namespace['config'].plugins.boxsysteminfo.refresh_interval.value = '0'
+        screen._schedule_refresh()
+        self.assertFalse(screen._refresh_timer.running)
         screen.refresh()
         last = Container.instances[-1]
         screen.close()
         last.emit('{}',0)
         self.assertTrue(last.killed)
+        count = len(Container.instances)
+        screen._automatic_refresh()
+        self.assertEqual(len(Container.instances), count)
+        self.assertFalse(screen._refresh_timer.running)
 
 
 if __name__ == '__main__': unittest.main()

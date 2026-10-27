@@ -4,7 +4,7 @@ Arbeite am Enigma2-Plugin BoxSystemInfo im Repository `Schrotty74/Enigma-Plugins
 
 Lies zuerst `AGENTS.md` im Repository-Stamm sowie alle vier Dateien unter `context/BoxSystemInfo/`. Für Build-Arbeit zusätzlich `plugins/BoxSystemInfo/BUILDING.md` lesen. Prüfe Git-Status, Branches und vollständige betroffene Dateien; schlage keine schon vorhandenen Funktionen erneut vor.
 
-Aktueller geprüfter und zur Veröffentlichung freigegebener Stand ist 0.1.9, Tag `boxsysteminfo-v0.1.9`; 0.1.7 bleibt als älteres Release erhalten. Die Erweiterungen entstanden auf `development/boxsysteminfo-0.1.8`. Prüfe den aktuellen GitHub-Stand statt einen Branch blind vorauszusetzen.
+Aktueller lokaler Teststand ist 0.1.10: implementiert und auf dem Receiver installiert, 67 Tests und Paketbau erfolgreich. Persönlicher Nutzertest und Freigabe stehen aus. Neuester öffentlicher Stand bleibt 0.1.9, Tag `boxsysteminfo-v0.1.9`; 0.1.7 bleibt als älteres Release erhalten. Die Erweiterungen entstanden auf `development/boxsysteminfo-0.1.8`. Prüfe den aktuellen GitHub-Stand statt einen Branch blind vorauszusetzen.
 
 Die allgemeine Übersicht bleibt der Startbildschirm. Gelb öffnet zusätzliche Details, Exit führt zurück. Der Nutzer hat die korrigierten Speicherwerte in 0.1.9 bestätigt und den Upload ausdrücklich freigegeben. Für spätere IPKs ist erneut sein persönlicher Test und eine ausdrückliche Veröffentlichungsfreigabe nötig.
 

@@ -6,6 +6,8 @@
 
 Box Systeminfo zeigt Receiver-, Speicher-, Temperatur- und Image-Daten auf einem Enigma2-Bildschirm. Autor ist Schrotty74. Das Plugin richtet sich an offene Enigma2-Images wie OpenPLi und OpenATV auf ARMv7-Receivern. Version 0.1.9 wurde auf dem Receiver des Nutzers getestet. Der Nutzer bestätigte, dass die Daten jetzt angezeigt werden, und gab die Veröffentlichung des IPK frei.
 
+Diese Seite beschreibt auch Änderungen im lokalen Testbuild 0.1.10. Version 0.1.9 bleibt das neueste öffentliche IPK; 0.1.10 ist weder freigegeben noch veröffentlicht.
+
 ## Bildschirm und Bedienung
 
 Die Startansicht zeigt Karten für Temperaturen, Arbeitsspeicher und freien Root-Speicher. Darunter folgen Receiver- und Image-Daten. Rechts oben steht die geladene Plugin-Version.
@@ -15,9 +17,9 @@ Die Startansicht zeigt Karten für Temperaturen, Arbeitsspeicher und freien Root
 - Exit oder Rot: Plugin schließen.
 - Gelb oder Blau: Details öffnen.
 - In den Details blättern Hoch/Runter oder Gelb/Blau durch Speicher/SSD, CPU, Netzwerk und Tuner. Exit führt zurück zur Startübersicht.
-- Menü: Hilfe öffnen.
+- Menü: automatisches Aktualisierungsintervall oder Sprache einstellen und Hilfe öffnen. Zur Wahl stehen Aus, 2, 5, 10 und 30 Sekunden; standardmäßig sind es 5 Sekunden.
 
-Das Plugin liest Werte beim Öffnen und bei einer Aktualisierung mit OK. Ein Theme-Wechsel startet keine neue Abfrage. Es gibt keinen Hintergrunddienst.
+Automatische Aktualisierungen laufen nur, solange das Plugin geöffnet ist. OK aktualisiert sofort. Bei automatischen Aktualisierungen werden SMART-Daten höchstens einmal in 60 Sekunden abgefragt; OK startet eine neue SMART-Abfrage. Ein Theme-Wechsel startet keine neue Abfrage. Es gibt keinen Hintergrunddienst. Die Sprache folgt nach Möglichkeit der Image-Einstellung und fällt andernfalls auf Englisch zurück. Über das Menü lässt sie sich ändern.
 
 ## Installation
 
@@ -37,6 +39,8 @@ Das Plugin bevorzugt das mitgelieferte smartctl 7.4 im Ordner `bin/`. Die Binär
 
 Die Detailansicht zeigt außerdem, soweit verfügbar, Laufwerksmodell, SMART-Gesamtstatus und Betriebsstunden. Seriennummern werden nicht angezeigt.
 
+SMART-Details zeigen freigegebene Verschleiß- und Fehlerzähler, sofern das Laufwerk sie bereitstellt: remappte, ausstehende, offline nicht korrigierbare, gemeldete nicht korrigierbare, Ende-zu-Ende-, CRC-, Programmier- und Löschfehler. Verfügbarer Reservespeicher, ausdrücklich als verbleibender Prozentwert bezeichnete Lebensdauer, Host-Schreibmenge in GiB sowie TLC-/SLC-NAND-Schreibmenge können ebenfalls erscheinen. Aus `Wear_Leveling_Count` oder `Media_Wearout_Indicator` wird keine Restlebensdauer abgeleitet. Die vorliegenden WD-Attribute liefern keinen sicheren Restlebensdauer-Prozentwert.
+
 Abfragen laufen über `eConsoleAppContainer` außerhalb des GUI-Threads. Ein Enigma2-Timer begrenzt jeden Versuch auf drei Sekunden; pro Aktualisierung gibt es höchstens vier Versuche. Fordert smartctl ausdrücklich einen Gerätetyp an, folgt ein begrenzter SAT-Versuch. Beim Schließen oder erneuten Aktualisieren wird die laufende Abfrage abgebrochen. Ein passender hwmon-Sensor dient als Fallback.
 
 Die Anzeige unterscheidet unter anderem fehlendes Werkzeug, Standby, Zeitüberschreitung und fehlende Temperaturdaten. Ein fehlender Wert beweist nicht, dass ein Laufwerk keinen Sensor besitzt. Bei mehreren Laufwerken erscheint die erste verfügbare Temperatur. Auf der Startkarte wird kein Gerätename angezeigt.
@@ -46,8 +50,8 @@ Die Anzeige unterscheidet unter anderem fehlendes Werkzeug, Standby, Zeitübersc
 - Aufnahmespeicher: Kapazität, belegter und freier Platz, prozentuale Belegung und Einhängepunkt. Vorrang hat der konfigurierte Aufnahmepfad. Ist keiner gesetzt, verwendet das Plugin eine von Enigma2 eingehängte Partition nur dann, wenn genau ein Kandidat gefunden wird. Bei mehreren möglichen Partitionen bleibt der Pfad offen. Ein nicht eingehängter Aufnahmeordner wird nicht als Speicherlaufwerk angezeigt.
 - Die Speicherabfrage läuft in einem eigenen Python-Prozess mit drei Sekunden Zeitlimit. Langsame Netzwerkdateisysteme blockieren dadurch nicht die Oberfläche.
 - CPU: Anzahl aktiver Kerne, aktueller und maximaler Takt, soweit verfügbar, sowie Systemlast über 1, 5 und 15 Minuten. Systemlast ist keine prozentuale CPU-Auslastung.
-- Netzwerk: Schnittstelle, Typ, Verbindungsstatus und ausgehandelte Linkgeschwindigkeit, sofern der Treiber sie bereitstellt. Es erfolgen keine Internetabfragen. IP- und MAC-Adressen werden nicht angezeigt.
-- Tuner: konfigurierte Frontends und erkannte aktive Nutzung. FBC-Tuner können virtuelle Frontends liefern. Ein nicht beobachteter Tuner wird nicht als frei ausgegeben. Echte Aufnahmen werden nach Möglichkeit gefiltert; ein Zähler aus der Timerliste wird entsprechend bezeichnet.
+- Netzwerk: Schnittstelle, Typ, Verbindungsstatus, ausgehandelte Linkgeschwindigkeit, sofern der Treiber sie bereitstellt, und Empfangs-/Senderaten in Mbit/s. Raten erscheinen nach zwei Zählerständen. Es erfolgen keine Internetabfragen. IP- und MAC-Adressen werden nicht angezeigt.
+- Tuner: konfigurierte Frontends und erkannte aktive Nutzung. Der aktive DVB-Dienst kann zusätzlich Signalqualität in dB oder als treiberabhängigen Prozentwert, relative Signalstärke (AGC), BER und Lock-Status melden. Nicht unterstützte Werte bleiben nicht verfügbar. FBC-Tuner können virtuelle Frontends liefern. Ein nicht beobachteter Tuner wird nicht als frei ausgegeben. Echte Aufnahmen werden nach Möglichkeit gefiltert; ein Zähler aus der Timerliste wird entsprechend bezeichnet.
 - Hinweise: SoC-Temperatur ab 80 °C, Laufwerkstemperatur ab 60 °C und Speicherbelegung ab 90 %. SMART-Fehler und ein nur lesbarer Aufnahmespeicher werden ebenfalls hervorgehoben. Diese Schwellen sind Hinweise und keine Herstellergrenzwerte.
 
 Die Tuneransicht erkennt möglicherweise nicht jede aktive Nutzung, etwa alle Streaming- oder Bild-in-Bild-Dienste. „Keine aktive Nutzung erkannt“ bedeutet deshalb nicht, dass ein Tuner sicher frei ist.
@@ -83,6 +87,8 @@ Das Quellarchiv enthält Plugin-Code, Tests, Build-Skripte, die Originalquellen 
 ## Kompatibilität und Prüfungen
 
 OpenPLi und OpenATV sind Ziel-Images. Praktisch geprüft wurde bisher eine Receiver-/Image-Kombination. OpenATV, andere Receiver und Python 2 wurden nicht auf Hardware getestet. Eine allgemeine Kompatibilitätszusage gibt es nicht. Zeitüberschreitungen und Prozessfehler werden mit Testdoubles geprüft, nicht durch absichtlich blockierte Laufwerke auf dem Receiver.
+
+Der lokale Testbuild 0.1.10 besteht 67 Tests und ist auf dem Receiver installiert. Die installierten Python-Quellen stimmen mit dem Checkout überein. Übersicht, Detailseiten, Sprachwahl und Aktualisierungsoptionen wurden auf dem Receiver geprüft. Persönlicher Nutzertest und Veröffentlichungsfreigabe stehen aus.
 
 Die aktuelle Version ist 0.1.9. Frühere Änderungen stehen im englischen [Changelog](CHANGELOG.md). Der Quellcode-Tag heißt `boxsysteminfo-v0.1.9`.
 

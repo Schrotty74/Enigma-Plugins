@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.10 local test build (not released)
+
+- Add configurable automatic refresh while the plugin is open, with Off, 2, 5, 10, and 30 second intervals and a 5 second default. Manual refresh remains available; automatic SMART queries run at most once per 60 seconds, while manual refresh forces a query.
+- Add received and sent network rates in Mbit/s after two sysfs counter samples.
+- Add live DVB signal quality in dB or relative percent, signal power (AGC), BER, and lock state when the active frontend supports them.
+- Add allowlisted SMART wear and error counters. Remaining life is shown only for explicitly identified percentage fields; no estimate is derived from `Wear_Leveling_Count` or `Media_Wearout_Indicator`.
+- Add GNU gettext English and German catalogs, automatic image-language selection with English fallback, and a menu language override.
+- Add menu options for refresh interval and language, alongside help.
+
+This local test build passes 67 tests and is installed on the receiver. Personal user testing and publication approval are pending. Version 0.1.9 remains the latest public IPK; 0.1.10 has not been approved or released.
+
 ## 0.1.9
 
 - Detect a unique Enigma2-mounted recording partition when no recording path is configured. Leave the path unresolved when the mounted partitions are ambiguous.

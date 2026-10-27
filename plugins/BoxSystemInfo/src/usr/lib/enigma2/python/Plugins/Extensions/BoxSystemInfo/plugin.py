@@ -10,12 +10,15 @@ import time
 import glob
 import json
 
-from .probes import cpu_info, network_info, tuner_info
+from .i18n import _
+from .probes import cpu_info, network_info, tuner_info, active_tuner_info, NetworkRates
+from .smart import parse_smart_wear
 
 from enigma import eConsoleAppContainer, eTimer
 
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
+from Screens.ChoiceBox import ChoiceBox
 from Components.ActionMap import ActionMap
 from Components.Label import Label
 from Components.config import config, ConfigSubsection, ConfigSelection, configfile
@@ -35,7 +38,12 @@ config.plugins.boxsysteminfo.theme = ConfigSelection(
 )
 
 
-VERSION = "0.1.9"
+config.plugins.boxsysteminfo.refresh_interval = ConfigSelection(
+    default="5", choices=[("0", _("Aus")), ("2", "2 s"), ("5", "5 s"), ("10", "10 s"), ("30", "30 s")])
+config.plugins.boxsysteminfo.language = ConfigSelection(
+    default="system", choices=[("system", "Image"), ("de", "Deutsch"), ("en", "English")])
+
+VERSION = "0.1.10"
 
 # Advisory display thresholds, not hardware manufacturer limits.
 SOC_WARNING = 80.0
@@ -93,7 +101,7 @@ def _memory_info():
     if not total:
         return "—", "—"
     used = max(0, total - available)
-    return "%s / %s" % (_pretty_bytes(used), _pretty_bytes(total)), "%d%% belegt" % int(used * 100 / total)
+    return "%s / %s" % (_pretty_bytes(used), _pretty_bytes(total)), _("%d%% belegt") % int(used * 100 / total)
 
 
 def _uptime():
@@ -103,8 +111,8 @@ def _uptime():
         hours, seconds = divmod(seconds, 3600)
         minutes = seconds // 60
         if days:
-            return "%d Tage, %d Std., %d Min." % (days, hours, minutes)
-        return "%d Std., %d Min." % (hours, minutes)
+            return _("%d Tage, %d Std., %d Min.") % (days, hours, minutes)
+        return _("%d Std., %d Min.") % (hours, minutes)
     except (ValueError, IndexError):
         return "—"
 
@@ -187,7 +195,7 @@ def _soc_temperature():
             result = _format_temperature(_read(path, ""), True)
             if result:
                 return result
-    return "Nicht verfügbar"
+    return _("Nicht verfügbar")
 
 
 def _find_executable(name):
@@ -265,25 +273,28 @@ def _parse_smart_details(output, retval=0):
         if match:
             status = match.group(1).strip().upper()
             if status in ("PASSED", "OK"):
-                details["health"] = "Bestanden"
+                details["health"] = _("Bestanden")
             elif "FAIL" in status or "BAD" in status:
-                details["health"] = "Fehlgeschlagen"
+                details["health"] = _("Fehlgeschlagen")
                 details["health_failed"] = True
             else:
-                details["health"] = "Nicht eindeutig"
+                details["health"] = _("Nicht eindeutig")
         columns = line.split()
         if "ATTRIBUTE_NAME" in columns and "RAW_VALUE" in columns:
             raw_index = columns.index("RAW_VALUE")
         if len(columns) > raw_index and columns[0].isdigit() and columns[1] in ("Power_On_Hours", "Power_On_Hours_and_Msec"):
             match = re.match(r"^([0-9]+)", columns[raw_index])
             if match:
-                details["hours"] = match.group(1) + " Std."
+                details["hours"] = match.group(1) + _(" Std.")
         match = re.match(r"^\s*Power On Hours:\s*([0-9][0-9,]*)", line, re.I)
         if match:
-            details["hours"] = match.group(1).replace(",", "") + " Std."
+            details["hours"] = match.group(1).replace(",", "") + _(" Std.")
     if retval >= 0 and retval & 8:
-        details["health"] = "Fehlgeschlagen"
+        details["health"] = _("Fehlgeschlagen")
         details["health_failed"] = True
+    extended = parse_smart_wear(output)
+    if extended["wear_rows"]:
+        details.update(extended)
     return details
 
 
@@ -344,7 +355,7 @@ class DriveTemperatureQuery(object):
         self.output = ""
         self.devices = []
         self.pending = []
-        self.status = "Keine Temperaturdaten"
+        self.status = _("Keine Temperaturdaten")
         self.attempts = 0
 
     def start(self):
@@ -358,7 +369,7 @@ class DriveTemperatureQuery(object):
                 self.devices.sort(key=lambda path: os.path.basename(path) != preferred)
         self.smartctl = _find_executable("smartctl")
         if not self.smartctl:
-            self._finish("smartctl fehlt")
+            self._finish(_("smartctl fehlt"))
             return
         self.pending = [(os.path.basename(path), None) for path in self.devices[:4]]
         self._next()
@@ -369,7 +380,7 @@ class DriveTemperatureQuery(object):
         if not self.pending or self.attempts >= 4:
             if not self.details:
                 self.details = self._fallback_details
-            self._finish(self.status if self.devices else "Kein Laufwerk gefunden")
+            self._finish(self.status if self.devices else _("Kein Laufwerk gefunden"))
             return
         self.device, self.device_type = self.pending.pop(0)
         self.attempts += 1
@@ -420,17 +431,17 @@ class DriveTemperatureQuery(object):
             return
         lower = self.output.lower()
         if self.timed_out:
-            self.status = "SMART-Zeitlimit erreicht"
+            self.status = _("SMART-Zeitlimit erreicht")
         elif "standby" in lower or "sleep mode" in lower:
-            self.status = "Laufwerk im Standby"
+            self.status = _("Laufwerk im Standby")
         elif not self.device_type and "-d" in lower and ("specify" in lower or "unknown usb bridge" in lower):
             # Retry SAT only when smartctl explicitly requests a device type.
             self.pending.insert(0, (self.device, "sat"))
-            self.status = "SMART-Gerätetyp nicht erkannt"
+            self.status = _("SMART-Gerätetyp nicht erkannt")
         elif retval & 7:
-            self.status = "SMART-Abfrage fehlgeschlagen"
+            self.status = _("SMART-Abfrage fehlgeschlagen")
         else:
-            self.status = "Keine SMART-Temperaturdaten"
+            self.status = _("Keine SMART-Temperaturdaten")
         retry_type = self.pending[:1] == [(self.device, "sat")]
         if self.selected_device == self.device and not retry_type:
             self._finish(self.status)
@@ -446,7 +457,7 @@ class DriveTemperatureQuery(object):
             # OpenPLi kill() closes pipes without guaranteeing appClosed.
             container = self._detach()
             container.kill()
-            self.status = "SMART-Zeitlimit erreicht"
+            self.status = _("SMART-Zeitlimit erreicht")
             self._next()
 
     def _finish(self, value, available=False):
@@ -469,11 +480,11 @@ class StorageQuery(DriveTemperatureQuery):
         self.active = True
         self.output = ""
         if not path or not os.path.isabs(path):
-            self._finish({"status": "Kein Aufnahmepfad ermittelt"})
+            self._finish({"status": _("Kein Aufnahmepfad ermittelt")})
             return
         python = _find_executable("python3") or _find_executable("python")
         if python is None:
-            self._finish({"status": "Python-Werkzeug fehlt"})
+            self._finish({"status": _("Python-Werkzeug fehlt")})
             return
         self.container = eConsoleAppContainer()
         self.container.dataAvail.append(self._data)
@@ -496,13 +507,13 @@ class StorageQuery(DriveTemperatureQuery):
                 result = {}
         except (ValueError, TypeError):
             result = {}
-        self._finish(result or {"status": "Speicherabfrage fehlgeschlagen"})
+        self._finish(result or {"status": _("Speicherabfrage fehlgeschlagen")})
 
     def _timeout(self):
         if self.container is not None:
             container = self._detach()
             container.kill()
-            self._finish({"status": "Speicherabfrage: Zeitlimit erreicht"})
+            self._finish({"status": _("Speicherabfrage: Zeitlimit erreicht")})
 
     def _finish(self, result, available=False):
         self.active = False
@@ -592,7 +603,7 @@ def _disk_info():
         stats = os.statvfs("/")
         total = stats.f_blocks * stats.f_frsize
         free = stats.f_bavail * stats.f_frsize
-        return "%s frei von %s" % (_pretty_bytes(free), _pretty_bytes(total))
+        return _("%s frei von %s") % (_pretty_bytes(free), _pretty_bytes(total))
     except (AttributeError, OSError):
         return "—"
 
@@ -636,13 +647,13 @@ class BoxSystemInfo(Screen):
         Screen.__init__(self, session)
         self["heading"] = Label("Box Systeminfo")
         self["release"] = Label("Version " + VERSION)
-        self["subheading"] = Label("Receiver und Image auf einen Blick")
+        self["subheading"] = Label(_("Receiver und Image auf einen Blick"))
         self["boxhead"] = Label("Receiver")
-        self["imagehead"] = Label("Image und System")
+        self["imagehead"] = Label(_("Image und System"))
         self["boxpanel"] = Label("")
         self["imagepanel"] = Label("")
         self["footer"] = Label("")
-        for name, title in (("temperature", "Temperaturen"), ("memory", "Arbeitsspeicher"), ("storage", "Root-Speicher")):
+        for name, title in (("temperature", _("Temperaturen")), ("memory", _("Arbeitsspeicher")), ("storage", _("Root-Speicher"))):
             for suffix in ("panel", "title", "value", "detail"):
                 self[name + "_" + suffix] = Label(title if suffix == "title" else "")
         for prefix, count in (("box", 4), ("image", 8)):
@@ -658,19 +669,49 @@ class BoxSystemInfo(Screen):
             "red": self.close,
             "yellow": self.show_details,
             "blue": self.show_details,
-            "menu": self.show_help,
+            "menu": self.show_menu,
         }, -1)
+        self._is_closed = False
+        self._next_smart_refresh = 0
+        self._network_sampler = NetworkRates()
+        self._refresh_timer = eTimer()
+        self._refresh_connection = None
+        try:
+            self._refresh_timer.callback.append(self._automatic_refresh)
+        except AttributeError:
+            self._refresh_connection = self._refresh_timer.timeout.connect(self._automatic_refresh)
         self._drive_query = None
         self._storage_query = None
         self._details_screen = None
-        self._recording = {"status": "Wird gelesen …"}
+        self._recording = {"status": _("Wird gelesen …")}
         self._drive_details = {}
         self._root = {}
-        self._drive_value = "Wird gelesen …"
-        self.onClose.append(self._cancel_drive_query)
+        self._drive_value = _("Wird gelesen …")
+        self.onClose.append(self._shutdown)
         self.onLayoutFinish.append(self.apply_theme)
         self.refresh()
         self.apply_theme()
+        self._schedule_refresh()
+
+    def _schedule_refresh(self):
+        self._refresh_timer.stop()
+        interval = int(config.plugins.boxsysteminfo.refresh_interval.value)
+        if interval > 0 and not self._is_closed:
+            self._refresh_timer.start(interval * 1000, True)
+
+    def _automatic_refresh(self):
+        if self._is_closed:
+            return
+        try:
+            self.refresh(automatic=True)
+        finally:
+            self._schedule_refresh()
+
+    def _shutdown(self):
+        self._is_closed = True
+        self._refresh_timer.stop()
+        self._cancel_drive_query()
+        self._details_screen = None
 
     def _cancel_drive_query(self):
         if self._storage_query is not None:
@@ -707,26 +748,33 @@ class BoxSystemInfo(Screen):
     def detail_pages(self):
         recording = self._recording
         drive = self._drive_details
-        missing = "Nicht verfügbar"
+        missing = _("Nicht verfügbar")
         storage_rows = [
-            ("Abfragepfad", recording.get("path") or _recording_path() or missing),
-            ("Speicherstatus", recording.get("status", missing)),
-            ("Einhängepunkt", recording.get("mount", missing)),
-            ("Kapazität", _pretty_bytes(recording.get("total"))),
-            ("Belegt", _pretty_bytes(recording.get("used"))),
-            ("Frei", _pretty_bytes(recording.get("free"))),
-            ("Speicherbelegung", "%s%%" % recording["percent"] if "percent" in recording else missing),
-            ("SMART-Gerät", drive.get("device", missing)),
-            ("Laufwerksmodell", drive.get("model", missing)),
-            ("SMART-Gesamtstatus", drive.get("health", missing)),
-            ("Betriebsstunden", drive.get("hours", missing)),
-            ("Laufwerkstemperatur", self._drive_value.split(" (", 1)[0]),
+            (_("Abfragepfad"), recording.get("path") or _recording_path() or missing),
+            (_("Speicherstatus"), recording.get("status", missing)),
+            (_("Einhängepunkt"), recording.get("mount", missing)),
+            (_("Kapazität"), _pretty_bytes(recording.get("total"))),
+            (_("Belegt"), _pretty_bytes(recording.get("used"))),
+            (_("Frei"), _pretty_bytes(recording.get("free"))),
+            (_("Speicherbelegung"), "%s%%" % recording["percent"] if "percent" in recording else missing),
+            (_("SMART-Gerät"), drive.get("device", missing)),
+            (_("Laufwerksmodell"), drive.get("model", missing)),
+            (_("SMART-Gesamtstatus"), drive.get("health", missing)),
+            (_("Betriebsstunden"), drive.get("hours", missing)),
+            (_("Laufwerkstemperatur"), self._drive_value.split(" (", 1)[0]),
         ]
+        wear_rows = drive.get("wear_rows", [])
+        if wear_rows:
+            storage_rows += [(_("SSD-Zustand"), drive.get("wear_warning") or _("Keine Fehler gemeldet"))]
+            if not any(label == _("Verbleibende Lebensdauer") for label, value in wear_rows):
+                storage_rows += [(_("Verbleibende Lebensdauer"), missing)]
+            storage_rows += wear_rows
         pages = []
-        for title, rows in (("Aufnahmespeicher und Laufwerk", storage_rows), ("Prozessor", self._cpu_rows),
-                            ("Netzwerk", self._network_rows), ("Tuner und Aufnahmen", self._tuner_rows)):
+        for title, rows in ((_("Aufnahmespeicher und Laufwerk"), storage_rows), (_("Prozessor"), self._cpu_rows),
+                            (_("Netzwerk"), self._network_rows), (_("Tuner und Aufnahmen"), self._tuner_rows)):
             for offset in range(0, len(rows), 12):
-                pages.append((title, rows[offset:offset + 12]))
+                page_title = _("SSD-Zustand und Fehlerwerte") if title == _("Aufnahmespeicher und Laufwerk") and offset else title
+                pages.append((page_title, rows[offset:offset + 12]))
         return pages
 
     def _render_box(self):
@@ -738,14 +786,27 @@ class BoxSystemInfo(Screen):
         drive = self._drive_value.split(" (", 1)[0]
         self["temperature_detail"].setText("SSD  " + drive)
 
-    def refresh(self):
-        self._cancel_drive_query()
-        self._drive_value = "Wird gelesen …"
-        self._drive_details = {}
-        self._recording = {"status": "Wird gelesen …"}
+    def refresh(self, automatic=False):
+        if self._is_closed:
+            return
+        clock = getattr(time, "monotonic", time.time)()
+        busy = any(query is not None and query.active for query in (self._storage_query, self._drive_query))
+        read_drive = not automatic or (clock >= self._next_smart_refresh and not busy)
+        if read_drive:
+            self._cancel_drive_query()
+            if not automatic:
+                self._drive_value = _("Wird gelesen …")
+                self._drive_details = {}
+                self._recording = {"status": _("Wird gelesen …")}
+            self._next_smart_refresh = clock + 60
         self._cpu_rows = cpu_info()
-        self._network_rows = network_info()
-        self._tuner_rows = tuner_info(self.session)
+        self._network_rows = network_info(self._network_sampler)
+        self._tuner_rows = tuner_info(self.session) + active_tuner_info(self.session)
+        self["subheading"].setText(_("Receiver und Image auf einen Blick"))
+        self["boxhead"].setText(_("Receiver"))
+        self["imagehead"].setText(_("Image und System"))
+        for name, title in (("temperature", _("Temperaturen")), ("memory", _("Arbeitsspeicher")), ("storage", _("Root-Speicher"))):
+            self[name + "_title"].setText(_(title))
         image_name, image_version, image_build = _image_info()
         memory, memory_percent = _memory_info()
         model = _box_model()
@@ -753,36 +814,37 @@ class BoxSystemInfo(Screen):
         kernel = platform.release() or "—"
         python_version = platform.python_version()
         self._box_rows = [
-            ("Modell", model),
-            ("Prozessor", _cpu_name()),
-            ("Architektur", platform.machine() or "—"),
-            ("Systemlaufzeit", _uptime()),
+            (_("Modell"), model),
+            (_("Prozessor"), _cpu_name()),
+            (_("Architektur"), platform.machine() or "—"),
+            (_("Systemlaufzeit"), _uptime()),
         ]
         self._soc_value = _soc_temperature()
         self._memory_warning = bool(re.match(r"^(9[0-9]|100)%", memory_percent))
         self["memory_value"].setText(memory_percent)
         self["memory_detail"].setText(memory)
         self._root = _root_usage()
-        self["storage_value"].setText(_pretty_bytes(self._root.get("free")) + " frei")
-        self["storage_detail"].setText("von " + _pretty_bytes(self._root.get("total")))
+        self["storage_value"].setText(_pretty_bytes(self._root.get("free")) + _(" frei"))
+        self["storage_detail"].setText(_("von ") + _pretty_bytes(self._root.get("total")))
         image_rows = [
             ("Image", image_name),
-            ("Image-Version", image_version),
+            (_("Image-Version"), image_version),
             ("Build", image_build or "—"),
-            ("Image erstellt", _image_build_date()),
+            (_("Image erstellt"), _image_build_date()),
             ("Enigma2", version),
             ("Kernel", kernel),
             ("Python", python_version),
-            ("Aktualisiert", time.strftime("%H:%M:%S")),
+            (_("Aktualisiert"), time.strftime("%H:%M:%S")),
         ]
         self._render_box()
-        self._storage_query = StorageQuery(self._recording_result)
-        self._storage_query.start(_recording_path())
+        if read_drive:
+            self._storage_query = StorageQuery(self._recording_result)
+            self._storage_query.start(_recording_path())
         for index, (key, value) in enumerate(image_rows):
             self["image_label_%d" % index].setText(key)
             self["image_value_%d" % index].setText(value)
         theme = THEMES.get(config.plugins.boxsysteminfo.theme.value, THEMES["midnight"])
-        self["footer"].setText("◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Hilfe    EXIT Schließen" % theme["name"])
+        self["footer"].setText(_("◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Optionen    EXIT Schließen") % theme["name"])
         self.apply_theme()
         self._notify_details()
 
@@ -842,7 +904,7 @@ class BoxSystemInfo(Screen):
         configfile.save()
         self.apply_theme()
         theme = THEMES.get(config.plugins.boxsysteminfo.theme.value, THEMES["midnight"])
-        self["footer"].setText("◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Hilfe    EXIT Schließen" % theme["name"])
+        self["footer"].setText(_("◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Optionen    EXIT Schließen") % theme["name"])
 
     def previous_theme(self):
         self._change_theme(-1)
@@ -850,9 +912,45 @@ class BoxSystemInfo(Screen):
     def next_theme(self):
         self._change_theme(1)
 
+    def show_menu(self):
+        interval = config.plugins.boxsysteminfo.refresh_interval.value
+        language = config.plugins.boxsysteminfo.language.value
+        self.session.openWithCallback(self._menu_selected, ChoiceBox,
+            title=_("Box Systeminfo · Optionen"), list=[
+                (_("Aktualisierung: %s") % (_("Aus") if interval == "0" else interval + " s"), "refresh"),
+                (_("Sprache: %s") % {"system": _("Image-Sprache"), "de": "Deutsch", "en": "English"}.get(language, language), "language"),
+                (_("Hilfe"), "help")])
+
+    def _menu_selected(self, choice):
+        if not choice or self._is_closed:
+            return
+        if choice[1] == "help":
+            self.show_help()
+        elif choice[1] == "refresh":
+            choices = [(_("Aus"), "0")] + [(str(n) + " s", str(n)) for n in (2, 5, 10, 30)]
+            self.session.openWithCallback(self._interval_selected, ChoiceBox,
+                title=_("Automatische Aktualisierung"), list=choices)
+        elif choice[1] == "language":
+            self.session.openWithCallback(self._language_selected, ChoiceBox,
+                title=_("Sprache"), list=[(_("Image-Sprache"), "system"), ("Deutsch", "de"), ("English", "en")])
+
+    def _interval_selected(self, choice):
+        if choice and not self._is_closed:
+            config.plugins.boxsysteminfo.refresh_interval.value = choice[1]
+            config.plugins.boxsysteminfo.refresh_interval.save()
+            configfile.save()
+            self._schedule_refresh()
+
+    def _language_selected(self, choice):
+        if choice and not self._is_closed:
+            config.plugins.boxsysteminfo.language.value = choice[1]
+            config.plugins.boxsysteminfo.language.save()
+            configfile.save()
+            self.refresh()
+
     def show_help(self):
         self.session.open(MessageBox,
-            "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details öffnen\nIn Details: Hoch/Runter oder Gelb/Blau blättern\nOK: Werte aktualisieren; Exit: schließen\n\nHinweise ab: SoC 80 °C, Laufwerk 60 °C, Speicher 90 % belegt. Das sind Hinweisschwellen, keine Herstellergrenzwerte.\n\nSystemlast ist keine CPU-Prozentanzeige. Tunerbelegung erfasst Live-TV und bekannte Aufnahme-/Streaming-Frontends; unerkannte Nutzung kann bestehen. Werte werden nur beim Öffnen oder mit OK gelesen.",
+            _("Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details öffnen\nIn Details: Hoch/Runter oder Gelb/Blau blättern\nOK: Werte aktualisieren; Exit: schließen\n\nHinweise ab: SoC 80 °C, Laufwerk 60 °C, Speicher 90 % belegt. Das sind Hinweisschwellen, keine Herstellergrenzwerte.\n\nSystemlast ist keine CPU-Prozentanzeige. Tunerbelegung erfasst Live-TV und bekannte Aufnahme-/Streaming-Frontends; unerkannte Nutzung kann bestehen. MENU: Aktualisierung und Sprache einstellen. Automatische Aktualisierung läuft nur bei geöffnetem Plugin; SMART höchstens einmal pro Minute. AGC ist ein Treiberwert, keine kalibrierte Feldstärke. SSD-Verschleiß wird nur bei eindeutigem Attribut angezeigt."),
             type=MessageBox.TYPE_INFO, timeout=8)
 
 
@@ -866,8 +964,8 @@ def _details_skin():
     label("subheading", 40, 79, 1030, 32, 21)
     label("panel", 36, 132, 1048, 416, 20, True)
     for index in range(12):
-        label("label_%d" % index, 54, 150 + 32 * index, 266, 30, 20)
-        label("value_%d" % index, 330, 150 + 32 * index, 736, 30, 21)
+        label("label_%d" % index, 54, 150 + 32 * index, 330, 30, 19)
+        label("value_%d" % index, 400, 150 + 32 * index, 666, 30, 20)
     label("note", 40, 553, 1040, 30, 17)
     label("footer", 40, 593, 1040, 32, 19)
     return '<screen name="BoxSystemInfoDetails" position="center,center" size="1120,650" title="Box Systeminfo">%s</screen>' % "".join(widgets)
@@ -890,7 +988,7 @@ class SystemDetails(Screen):
             "up": self.previous_page, "down": self.next_page,
             "yellow": self.next_page, "blue": self.previous_page,
             "left": self.previous_theme, "right": self.next_theme,
-            "green": self.next_theme, "menu": owner.show_help,
+            "green": self.next_theme, "menu": owner.show_menu,
         }, -1)
         self.onLayoutFinish.append(self.render)
         self.render()
@@ -902,15 +1000,17 @@ class SystemDetails(Screen):
         theme = THEMES.get(config.plugins.boxsysteminfo.theme.value, THEMES["midnight"])
         self["heading"].setText("Box Systeminfo · Details")
         self["release"].setText("Version " + VERSION)
-        self["subheading"].setText(title)
-        self["footer"].setText("▲ / ▼ Seite %d/%d    ◀ / ▶ %s    OK Aktualisieren    EXIT Zurück" % (self.page + 1, len(pages), theme["name"]))
+        self["subheading"].setText(_(title))
+        self["footer"].setText(_("▲ / ▼ Seite %d/%d    ◀ / ▶ %s    OK Aktualisieren    EXIT Zurück") % (self.page + 1, len(pages), theme["name"]))
         note = ""
         if title.startswith("Tuner"):
-            note = "FBC umfasst virtuelle Frontends. Nicht erkannte Nutzung bedeutet nicht automatisch frei."
-        elif title.startswith("Prozessor"):
-            note = "Systemlast: Mittelwerte über 1, 5 und 15 Minuten; keine CPU-Auslastung in Prozent."
-        elif title.startswith("Aufnahme"):
-            note = "Aufnahmespeicher und SMART-Gerät können unterschiedlich sein, etwa bei Netzwerkaufnahmen."
+            note = _("FBC umfasst virtuelle Frontends. Nicht erkannte Nutzung bedeutet nicht automatisch frei.")
+        elif title.startswith(_("Prozessor")):
+            note = _("Systemlast: Mittelwerte über 1, 5 und 15 Minuten; keine CPU-Auslastung in Prozent.")
+        elif title == _("SSD-Zustand und Fehlerwerte"):
+            note = _("SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt.")
+        elif title.startswith(_("Aufnahme")):
+            note = _("Aufnahmespeicher und SMART-Gerät können unterschiedlich sein, etwa bei Netzwerkaufnahmen.")
         self["note"].setText(note)
         if self.instance is not None:
             self.owner._set_color(self, theme["bg"])
@@ -920,16 +1020,17 @@ class SystemDetails(Screen):
             self.owner._set_color(self[name], theme["text"] if name in ("heading", "subheading") else theme["muted"], True)
         for index in range(12):
             key, value = rows[index] if index < len(rows) else ("", "")
-            self["label_%d" % index].setText(key)
-            text = str(value)
+            self["label_%d" % index].setText(_(key))
+            text = _(str(value))
             self["value_%d" % index].setText(text[:65] + "…" if len(text) > 66 else text)
             self.owner._set_color(self["label_%d" % index], theme["panel"])
             self.owner._set_color(self["value_%d" % index], theme["panel"])
             self.owner._set_color(self["label_%d" % index], theme["muted"], True)
-            warning = (key == "Speicherbelegung" and self.owner._recording.get("percent", 0) >= STORAGE_WARNING
-                       or key == "SMART-Gesamtstatus" and self.owner._drive_details.get("health_failed")
-                       or key == "Laufwerkstemperatur" and _temperature_warning(self.owner._drive_value, DRIVE_WARNING)
-                       or key == "Speicherstatus" and self.owner._recording.get("read_only"))
+            warning = (key == _("Speicherbelegung") and self.owner._recording.get("percent", 0) >= STORAGE_WARNING
+                       or key == _("SMART-Gesamtstatus") and self.owner._drive_details.get("health_failed")
+                       or key == _("Laufwerkstemperatur") and _temperature_warning(self.owner._drive_value, DRIVE_WARNING)
+                       or key == _("Speicherstatus") and self.owner._recording.get("read_only")
+                       or key == _("SSD-Zustand") and self.owner._drive_details.get("wear_warning"))
             self.owner._set_color(self["value_%d" % index], "#e46969" if warning else theme["text"], True)
         if self.instance is not None:
             self.instance.invalidate()
@@ -960,4 +1061,4 @@ def main(session, **kwargs):
 
 
 def Plugins(**kwargs):
-    return [PluginDescriptor(name="Box Systeminfo", description="Receiver- und Image-Informationen", where=PluginDescriptor.WHERE_PLUGINMENU, icon="icon.png", fnc=main)]
+    return [PluginDescriptor(name="Box Systeminfo", description=_("Receiver- und Image-Informationen"), where=PluginDescriptor.WHERE_PLUGINMENU, icon="icon.png", fnc=main)]

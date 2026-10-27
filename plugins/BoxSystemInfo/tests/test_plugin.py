@@ -1,5 +1,6 @@
 """Focused regression tests; Enigma2 callbacks use test doubles on the host."""
 import ast
+import importlib.util
 import json
 import glob
 import os
@@ -18,7 +19,11 @@ TREE = ast.parse(SOURCE.read_text(encoding='utf-8'))
 NODES = [n for n in TREE.body if isinstance(n, ast.FunctionDef) or
          isinstance(n, ast.ClassDef) and n.name in ('DriveTemperatureQuery', 'StorageQuery')]
 M = types.ModuleType('plugin_helpers')
-M.__dict__.update(os=os, glob=glob, re=re, time=time, json=json, __file__=str(SOURCE))
+smart_spec = importlib.util.spec_from_file_location('smart_helpers', str(SOURCE.parent / 'smart.py'))
+smart_helpers = importlib.util.module_from_spec(smart_spec)
+smart_spec.loader.exec_module(smart_helpers)
+M.__dict__.update(os=os, glob=glob, re=re, time=time, json=json, __file__=str(SOURCE),
+                  _=lambda text: text, parse_smart_wear=smart_helpers.parse_smart_wear)
 exec(compile(ast.Module(body=NODES, type_ignores=[]), str(SOURCE), 'exec'), M.__dict__)
 
 # Only the temperature table header/row from the observed device; no identifiers.

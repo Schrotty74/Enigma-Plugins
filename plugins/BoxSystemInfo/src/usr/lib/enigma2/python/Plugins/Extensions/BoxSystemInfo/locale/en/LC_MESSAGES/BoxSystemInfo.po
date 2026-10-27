@@ -1,0 +1,390 @@
+# Box Systeminfo translations. German source msgids.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+
+msgid " Std."
+msgstr " h"
+
+msgid " frei"
+msgstr " free"
+
+msgid "%.0f%%"
+msgstr "%.0f%%"
+
+msgid "%.2f"
+msgstr "%.2f"
+
+msgid "%.2f Mbit/s"
+msgstr "%.2f Mbit/s"
+
+msgid "%d Std., %d Min."
+msgstr "%d h, %d min"
+
+msgid "%d Tage, %d Std., %d Min."
+msgstr "%d days, %d h, %d min"
+
+msgid "%d%%"
+msgstr "%d%%"
+
+msgid "%d%% belegt"
+msgstr "%d%% used"
+
+msgid "%s frei von %s"
+msgstr "%s free of %s"
+
+msgid "%s – Empfangen"
+msgstr "%s – Receive"
+
+msgid "%s – Gesendet"
+msgstr "%s – Send"
+
+msgid "AGC"
+msgstr "AGC"
+
+msgid "Abfragepfad"
+msgstr "Query path"
+
+msgid "Aktiv"
+msgstr "Active"
+
+msgid "Aktualisiert"
+msgstr "Updated"
+
+msgid "Aktualisierung: %s"
+msgstr "Refresh: %s"
+
+msgid "Aktueller Takt"
+msgstr "Current frequency"
+
+msgid "Arbeitsspeicher"
+msgstr "Memory"
+
+msgid "Architektur"
+msgstr "Architecture"
+
+msgid "Aufnahme"
+msgstr "Recording"
+
+msgid "Aufnahmen (Timer)"
+msgstr "Recordings (timers)"
+
+msgid "Aufnahmespeicher und Laufwerk"
+msgstr "Recording storage and drive"
+
+msgid "Aufnahmespeicher und SMART-Gerät können unterschiedlich sein, etwa bei Netzwerkaufnahmen."
+msgstr "Recording storage and the SMART device may differ, for example with network recordings."
+
+msgid "Aus"
+msgstr "Off"
+
+msgid "Ausstehende Sektoren"
+msgstr "Pending sectors"
+
+msgid "Automatische Aktualisierung"
+msgstr "Automatic refresh"
+
+msgid "BER"
+msgstr "BER"
+
+msgid "Belegt"
+msgstr "Used"
+
+msgid "Belegte Frontends"
+msgstr "Occupied frontends"
+
+msgid "Bestanden"
+msgstr "Passed"
+
+msgid "Betriebsstunden"
+msgstr "Power-on hours"
+
+msgid "Box Systeminfo · Optionen"
+msgstr "Box Systeminfo · Options"
+
+msgid "Datenpfadfehler"
+msgstr "End-to-end errors"
+
+msgid "Einhängepunkt"
+msgstr "Mount point"
+
+msgid "FBC umfasst virtuelle Frontends. Nicht erkannte Nutzung bedeutet nicht automatisch frei."
+msgstr "FBC includes virtual frontends. Unobserved use does not mean a tuner is free."
+
+msgid "Fehlgeschlagen"
+msgstr "Failed"
+
+msgid "Frei"
+msgstr "Free"
+
+msgid "Gemeldete Lesefehler"
+msgstr "Reported read errors"
+
+msgid "Geschrieben (Host)"
+msgstr "Host writes"
+
+msgid "Geschrieben (SLC)"
+msgstr "NAND writes (SLC)"
+
+msgid "Geschrieben (TLC)"
+msgstr "NAND writes (TLC)"
+
+msgid "Getrennt"
+msgstr "Disconnected"
+
+msgid "Hilfe"
+msgstr "Help"
+
+msgid "Image erstellt"
+msgstr "Image built"
+
+msgid "Image und System"
+msgstr "Image and system"
+
+msgid "Image-Sprache"
+msgstr "Image language"
+
+msgid "Image-Version"
+msgstr "Image version"
+
+msgid "Ja"
+msgstr "Yes"
+
+msgid "Kapazität"
+msgstr "Capacity"
+
+msgid "Kein Aufnahmepfad ermittelt"
+msgstr "No recording path found"
+
+msgid "Kein Laufwerk gefunden"
+msgstr "No drive found"
+
+msgid "Kein eigener Aufnahmespeicher eingehängt"
+msgstr "No separate recording storage mounted"
+
+msgid "Keine Fehler gemeldet"
+msgstr "No errors reported"
+
+msgid "Keine SMART-Temperaturdaten"
+msgstr "No SMART temperature data"
+
+msgid "Keine Temperaturdaten"
+msgstr "No temperature data"
+
+msgid "Keine aktive Nutzung erkannt"
+msgstr "No active use detected"
+
+msgid "Kerne"
+msgstr "Cores"
+
+msgid "Konfigurierte Tuner"
+msgstr "Configured tuners"
+
+msgid "Laufende Aufnahmen"
+msgstr "Active recordings"
+
+msgid "Laufwerk im Standby"
+msgstr "Drive in standby"
+
+msgid "Laufwerksmodell"
+msgstr "Drive model"
+
+msgid "Laufwerkstemperatur"
+msgstr "Drive temperature"
+
+msgid "Löschfehler"
+msgstr "Erase failures"
+
+msgid "Maximaler Takt"
+msgstr "Maximum frequency"
+
+msgid "Medienfehler"
+msgstr "Media errors"
+
+msgid "Modell"
+msgstr "Model"
+
+msgid "Nein"
+msgstr "No"
+
+msgid "Netzwerk"
+msgstr "Network"
+
+msgid "Netzwerk / virtuell"
+msgstr "Network / virtual"
+
+msgid "Nicht eindeutig"
+msgstr "Unclear"
+
+msgid "Nicht korrigierbare Sektoren"
+msgstr "Uncorrectable sectors"
+
+msgid "Nicht unterscheidbar"
+msgstr "Cannot distinguish"
+
+msgid "Nicht verfügbar"
+msgstr "Unavailable"
+
+msgid "Nur lesbar"
+msgstr "Read-only"
+
+msgid "Programmierfehler"
+msgstr "Program failures"
+
+msgid "Prozessor"
+msgstr "Processor"
+
+msgid "Python-Werkzeug fehlt"
+msgstr "Python executable missing"
+
+msgid "Receiver"
+msgstr "Receiver"
+
+msgid "Receiver und Image auf einen Blick"
+msgstr "Receiver and image at a glance"
+
+msgid "Receiver- und Image-Informationen"
+msgstr "Receiver and image information"
+
+msgid "Remappte Ereignisse"
+msgstr "Reallocation events"
+
+msgid "Remappte Sektoren"
+msgstr "Reallocated sectors"
+
+msgid "Reserveplatz verfügbar"
+msgstr "Available reserve space"
+
+msgid "Root-Speicher"
+msgstr "Root storage"
+
+msgid "SMART-Abfrage fehlgeschlagen"
+msgstr "SMART query failed"
+
+msgid "SMART-Fehler erkannt"
+msgstr "SMART errors reported"
+
+msgid "SMART-Gerät"
+msgstr "SMART device"
+
+msgid "SMART-Gerätetyp nicht erkannt"
+msgstr "SMART device type not recognized"
+
+msgid "SMART-Gesamtstatus"
+msgstr "SMART health"
+
+msgid "SMART-Zeitlimit erreicht"
+msgstr "SMART query timed out"
+
+msgid "SSD-Zustand"
+msgstr "SSD status"
+
+msgid "Signalqualität"
+msgstr "Signal quality"
+
+msgid "Sonstige"
+msgstr "Other"
+
+msgid "Speicherabfrage fehlgeschlagen"
+msgstr "Storage query failed"
+
+msgid "Speicherabfrage: Zeitlimit erreicht"
+msgstr "Storage query timed out"
+
+msgid "Speicherbelegung"
+msgstr "Storage usage"
+
+msgid "Speicherstatus"
+msgstr "Storage status"
+
+msgid "Sprache"
+msgstr "Language"
+
+msgid "Sprache: %s"
+msgstr "Language: %s"
+
+msgid "Systeminfo für Enigma2.\n\nLinks/Rechts oder Grün: Theme wechseln\nGelb/Blau: Details öffnen\nIn Details: Hoch/Runter oder Gelb/Blau blättern\nOK: Werte aktualisieren; Exit: schließen\n\nHinweise ab: SoC 80 °C, Laufwerk 60 °C, Speicher 90 % belegt. Das sind Hinweisschwellen, keine Herstellergrenzwerte.\n\nSystemlast ist keine CPU-Prozentanzeige. Tunerbelegung erfasst Live-TV und bekannte Aufnahme-/Streaming-Frontends; unerkannte Nutzung kann bestehen. MENU: Aktualisierung und Sprache einstellen. Automatische Aktualisierung läuft nur bei geöffnetem Plugin; SMART höchstens einmal pro Minute. AGC ist ein Treiberwert, keine kalibrierte Feldstärke. SSD-Verschleiß wird nur bei eindeutigem Attribut angezeigt."
+msgstr "System information for Enigma2.\n\nLeft/Right or Green: change theme\nYellow/Blue: open details\nIn details: Up/Down or Yellow/Blue: change page\nOK: refresh; Exit: close\nMENU: refresh interval and language\n\nAdvisory thresholds: SoC 80 °C, drive 60 °C, storage 90% used; these are not manufacturer limits.\n\nLoad averages are not CPU usage percentages. Tuner use includes observed live, recording and streaming frontends; other use may go undetected. Automatic refresh runs only while the plugin is open; SMART at most once per minute. AGC is a relative driver value. SSD lifetime is shown only for unambiguous attributes."
+
+msgid "Systemlast (1/5/15 Min.)"
+msgstr "Load average (1/5/15 min)"
+
+msgid "Systemlast: Mittelwerte über 1, 5 und 15 Minuten; keine CPU-Auslastung in Prozent."
+msgstr "Load averages cover 1, 5 and 15 minutes; these are not CPU usage percentages."
+
+msgid "Systemlaufzeit"
+msgstr "Uptime"
+
+msgid "Temperaturen"
+msgstr "Temperatures"
+
+msgid "Tuner und Aufnahmen"
+msgstr "Tuners and recordings"
+
+msgid "Tuner-Frontends"
+msgstr "Tuner frontends"
+
+msgid "Tuner-Lock"
+msgstr "Tuner lock"
+
+msgid "Tunerbelegung"
+msgstr "Tuner usage"
+
+msgid "Verbleibende Lebensdauer"
+msgstr "Remaining lifetime"
+
+msgid "Verbunden"
+msgstr "Connected"
+
+msgid "Verfügbar"
+msgstr "Available"
+
+msgid "Verschleiß (Percentage Used)"
+msgstr "Wear (Percentage Used)"
+
+msgid "Verschleißgrenze erreicht"
+msgstr "Wear limit reached"
+
+msgid "Wird gelesen …"
+msgstr "Reading …"
+
+msgid "smartctl fehlt"
+msgstr "smartctl missing"
+
+msgid "von "
+msgstr "of "
+
+msgid "Übertragungsfehler"
+msgstr "Transfer errors"
+
+msgid "▲ / ▼ Seite %d/%d    ◀ / ▶ %s    OK Aktualisieren    EXIT Zurück"
+msgstr "▲ / ▼ Page %d/%d    ◀ / ▶ %s    OK Refresh    EXIT Back"
+
+msgid "◀ / ▶ %s    OK Aktualisieren    GELB Details    MENU Optionen    EXIT Schließen"
+msgstr "◀ / ▶ %s    OK Refresh    YELLOW Details    MENU Options    EXIT Close"
+
+msgid "Gemeldete unkorrigierbare Fehler"
+msgstr "Reported uncorrectable errors"
+
+msgid "Ende-zu-Ende-Fehler"
+msgstr "End-to-end errors"
+
+msgid "Verfügbare Reservesektoren"
+msgstr "Available reserve space"
+
+msgid "Host-Schreibmenge"
+msgstr "Host writes"
+
+msgid "TLC-NAND-Schreibmenge"
+msgstr "NAND writes (TLC)"
+
+msgid "SLC-NAND-Schreibmenge"
+msgstr "NAND writes (SLC)"
+
+msgid "SSD-Zustand und Fehlerwerte"
+msgstr "SSD health and error counters"
+
+msgid "SMART-Werte sind modellabhängig; fehlende Restlebensdauer wird nicht geschätzt."
+msgstr "SMART values depend on the drive model; missing remaining lifetime is not estimated."
+

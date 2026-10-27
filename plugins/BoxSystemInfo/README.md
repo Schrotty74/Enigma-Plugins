@@ -6,6 +6,8 @@
 
 Box Systeminfo displays receiver, storage, temperature, and image information on an Enigma2 screen. The author is Schrotty74. It targets open Enigma2 images such as OpenPLi and OpenATV on ARMv7 receivers. Version 0.1.9 was tested on the user's receiver; the user confirmed that the data is now displayed and approved publication of the IPK.
 
+This page also describes changes in local test build 0.1.10. Version 0.1.9 remains the latest public IPK; 0.1.10 has not been approved or released.
+
 ## Screen and controls
 
 The main screen shows cards for temperatures, memory, and free root storage, followed by receiver and image details. The loaded plugin version appears in the upper right.
@@ -15,9 +17,9 @@ The main screen shows cards for temperatures, memory, and free root storage, fol
 - Exit or Red: close the plugin.
 - Yellow or Blue: open details.
 - In details, Up/Down or Yellow/Blue moves between storage/SSD, CPU, network, and tuner pages. Exit returns to the main overview.
-- Menu: open help.
+- Menu: set the automatic refresh interval or language, or open help. The interval options are Off, 2, 5, 10, and 30 seconds; the default is 5 seconds.
 
-The plugin reads values when opened and when refreshed with OK. Changing the theme does not start another query. There is no background service.
+Automatic refresh runs only while the plugin is open. OK refreshes immediately. SMART data is queried at most once every 60 seconds during automatic refresh; pressing OK starts a new SMART query. Changing the theme does not start another query. There is no background service. The language follows the image setting when available and otherwise falls back to English. Menu options can override it.
 
 ## Installation
 
@@ -37,6 +39,8 @@ The plugin prefers its bundled smartctl 7.4 in `bin/`. The binary is 897,240 byt
 
 Where available, the details page also shows the drive model, overall SMART status, and power-on hours. Serial numbers are not displayed.
 
+The SMART details include allowlisted wear and error counters when a drive supplies them: reallocated, pending, offline-uncorrectable, reported-uncorrectable, end-to-end, CRC, program-fail, and erase-fail counts. Available reserved space, explicitly named remaining-life percentages, host writes in GiB, and TLC/SLC NAND writes may also be shown. The plugin does not infer remaining life from `Wear_Leveling_Count` or `Media_Wearout_Indicator`. The WD attributes currently supported by the parser provide no safe remaining-life percentage.
+
 Queries use `eConsoleAppContainer`, outside the GUI thread. An Enigma2 timer limits each attempt to three seconds, with at most four attempts per refresh. If smartctl explicitly requests a device type, the plugin makes one bounded SAT retry. Closing or refreshing cancels the active query. A matching hwmon sensor is used as a fallback.
 
 The display distinguishes missing tools, standby, timeout, and missing temperature data. A missing value does not prove that a drive lacks a sensor. With multiple drives, the first available temperature is shown. The main card omits the device name.
@@ -46,8 +50,8 @@ The display distinguishes missing tools, standby, timeout, and missing temperatu
 - Recording storage: capacity, used and free space, percent used, and mount point. The configured recording path takes precedence. If none is configured, the plugin uses an Enigma2-mounted partition only when it finds exactly one candidate; it leaves the path unset when several candidates are ambiguous. An unmounted recording directory is not reported as a recording disk.
 - Storage checks run in a separate Python process with a three-second timeout so a slow network filesystem cannot block the interface.
 - CPU: online core count, current and maximum clock where available, and load averages over 1, 5, and 15 minutes. Load averages are not CPU-use percentages.
-- Network: interface, type, connection state, and negotiated link speed when the driver exports it. No Internet query is made. IP and MAC addresses are not display fields.
-- Tuners: configured frontends and detected active use. FBC tuners can expose virtual frontends. An unobserved frontend is not reported as free. The recording count uses a real-recording filter where available; the timer-list fallback is labelled as such.
+- Network: interface, type, connection state, negotiated link speed when the driver exports it, and received/sent rates in Mbit/s. Rates appear after two counter samples. No Internet query is made. IP and MAC addresses are not display fields.
+- Tuners: configured frontends and detected active use. The active DVB service can also report signal quality in dB or a driver-relative percentage, relative signal power (AGC), BER, and lock state. Unsupported metrics remain unavailable. FBC tuners can expose virtual frontends. An unobserved frontend is not reported as free. The recording count uses a real-recording filter where available; the timer-list fallback is labelled as such.
 - Warnings: SoC temperature from 80 °C, drive temperature from 60 °C, and storage use from 90%. SMART failures and read-only recording storage are also highlighted. These are notification thresholds, not manufacturer limits.
 
 The tuner view may not observe every active service, such as all streaming or picture-in-picture use. Its notes distinguish a frontend with no detected activity from one confirmed to be free.
@@ -83,6 +87,8 @@ The source archive contains plugin code, tests, build scripts, the original smar
 ## Compatibility and verification
 
 The 0.1.9 package has been built and the 48 regression tests pass. The user tested it on a receiver and confirmed that the data is displayed. OpenPLi and OpenATV are target images; OpenATV, other receivers, and Python 2 have not been tested on hardware. The plugin makes no universal compatibility claim. Tests use doubles for timeouts and process failures rather than deliberately blocking a receiver drive.
+
+The 0.1.10 local test build passes 67 tests and has been installed on the receiver. Its installed Python sources match the checkout. The receiver GUI was checked: overview, detail pages, language selection and refresh options work. Personal user testing and release approval remain pending.
 
 The current release is 0.1.9. See the English [changelog](CHANGELOG.md) for earlier changes. The source tag is `boxsysteminfo-v0.1.9`.
 

@@ -4,6 +4,13 @@ from __future__ import print_function
 
 import os
 import re
+import time
+
+try:
+    from .i18n import _
+except (ImportError, ValueError):
+    def _(text):
+        return text
 
 UNAVAILABLE = "Nicht verfügbar"
 
@@ -86,27 +93,56 @@ def _mhz_value(raw):
 def cpu_info():
     rows = []
     count = _cpu_count()
-    rows.append(("Kerne", str(count) if count is not None else UNAVAILABLE))
+    rows.append((_("Kerne"), str(count) if count is not None else UNAVAILABLE))
     current = _mhz("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq")
     if current is None:
         current = _proc_mhz("cpu MHz")
     maximum = _mhz("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq")
-    rows.append(("Aktueller Takt", current or UNAVAILABLE))
-    rows.append(("Maximaler Takt", maximum or UNAVAILABLE))
+    rows.append((_("Aktueller Takt"), current or UNAVAILABLE))
+    rows.append((_("Maximaler Takt"), maximum or UNAVAILABLE))
     try:
         fields = _read("/proc/loadavg").split()
         load = ", ".join(fields[:3]) if len(fields) >= 3 else UNAVAILABLE
     except Exception:
         load = UNAVAILABLE
-    rows.append(("Systemlast (1/5/15 Min.)", load))
+    rows.append((_("Systemlast (1/5/15 Min.)"), load))
     return rows
 
 
-def network_info():
+class NetworkRates(object):
+    """Calculate per-interface rates from cumulative sysfs byte counters."""
+    def __init__(self, clock=None):
+        self.clock = clock or getattr(time, "monotonic", time.time)
+        self.previous = {}
+
+    def sample(self, interface, rx, tx, now=None):
+        try:
+            rx, tx = int(rx), int(tx)
+            if rx < 0 or tx < 0:
+                raise ValueError()
+            now = self.clock() if now is None else float(now)
+        except (TypeError, ValueError, OverflowError):
+            return UNAVAILABLE, UNAVAILABLE
+        old = self.previous.get(interface)
+        self.previous[interface] = (rx, tx, now)
+        if old is None:
+            return UNAVAILABLE, UNAVAILABLE
+        old_rx, old_tx, old_now = old
+        elapsed = now - old_now
+        if elapsed <= 0:
+            return UNAVAILABLE, UNAVAILABLE
+        def rate(current, previous):
+            if current < previous:
+                return UNAVAILABLE
+            return _("%.2f Mbit/s") % ((current - previous) * 8.0 / elapsed / 1000000.0)
+        return rate(rx, old_rx), rate(tx, old_tx)
+
+
+def network_info(sampler=None):
     try:
         interfaces = sorted(os.listdir("/sys/class/net"))
     except (IOError, OSError):
-        return [("Netzwerk", UNAVAILABLE)]
+        return [(_("Netzwerk"), UNAVAILABLE)]
     rows = []
     for interface in interfaces:
         if interface == "lo":
@@ -115,9 +151,9 @@ def network_info():
         carrier = _read(base + "/carrier")
         operstate = _read(base + "/operstate")
         if carrier == "1":
-            status = "Verbunden"
+            status = _("Verbunden")
         elif carrier == "0" or operstate == "down":
-            status = "Getrennt"
+            status = _("Getrennt")
         elif operstate:
             status = operstate
         else:
@@ -128,9 +164,65 @@ def network_info():
             speed_text = "%d Mbit/s" % speed_value if speed_value > 0 else UNAVAILABLE
         except (TypeError, ValueError):
             speed_text = UNAVAILABLE
-        kind = "WLAN" if os.path.exists(base + "/wireless") else ("LAN" if os.path.exists(base + "/device") else "Sonstige")
+        kind = "WLAN" if os.path.exists(base + "/wireless") else ("LAN" if os.path.exists(base + "/device") else _("Sonstige"))
         rows.append((interface, "%s · %s · %s" % (kind, status, speed_text)))
-    return rows or [("Netzwerk", UNAVAILABLE)]
+        if sampler is not None:
+            rx = _read(base + "/statistics/rx_bytes")
+            tx = _read(base + "/statistics/tx_bytes")
+            receive, send = sampler.sample(interface, rx, tx)
+            rows.append((_("%s – Empfangen") % interface, receive))
+            rows.append((_("%s – Gesendet") % interface, send))
+    return rows or [(_("Netzwerk"), UNAVAILABLE)]
+
+
+def active_tuner_info(session):
+    """Read signal metrics from the currently active service, without tuning."""
+    nav = getattr(session, "nav", None)
+    service = _safe_call(nav, "getCurrentService") if nav is not None else None
+    frontend = _safe_call(service, "frontendInfo") if service is not None else None
+    status = _safe_call(frontend, "getFrontendStatus") if frontend is not None else None
+    if not isinstance(status, dict):
+        return [(_("Signalqualität"), UNAVAILABLE), (_("AGC"), UNAVAILABLE),
+                (_("BER"), UNAVAILABLE), (_("Tuner-Lock"), UNAVAILABLE)]
+
+    def numeric(keys, suffix="", scale=1.0):
+        for key in keys:
+            if key not in status:
+                continue
+            try:
+                value = float(status[key])
+                if value < 0:
+                    continue
+                if suffix == "%":
+                    value *= scale
+                    if value > 100:
+                        continue
+                    return _("%.0f%%") % value
+                if suffix == " dB":
+                    value *= scale
+                return (_("%.2f") % value).rstrip("0").rstrip(".") + _(suffix)
+            except (TypeError, ValueError, OverflowError):
+                continue
+        return UNAVAILABLE
+
+    snr = numeric(("tuner_signal_quality_db",), " dB", 0.01)
+    if snr == UNAVAILABLE:
+        snr = numeric(("snr_db", "SNR_dB"), " dB")
+    if snr == UNAVAILABLE:
+        snr = numeric(("snr_percent", "signal_quality"), "%")
+    if snr == UNAVAILABLE:
+        snr = numeric(("tuner_signal_quality", "snr", "signal", "SNR"), "%", 100.0 / 65535.0)
+    agc = numeric(("tuner_signal_power", "agc", "AGC"), "%", 100.0 / 65535.0)
+    ber = numeric(("tuner_bit_error_rate", "ber", "BER"))
+    lock_value = status.get("tuner_locked", status.get("lock", status.get("LOCK")))
+    if isinstance(lock_value, (int, float)):
+        lock = _("Ja") if lock_value > 0 else (_("Nein") if lock_value == 0 else UNAVAILABLE)
+    elif isinstance(lock_value, bool):
+        lock = _("Ja") if lock_value else _("Nein")
+    else:
+        lock = UNAVAILABLE
+    return [(_("Signalqualität"), snr), (_("AGC"), agc),
+            (_("BER"), ber), (_("Tuner-Lock"), lock)]
 
 
 def _safe_call(obj, name, *args):
@@ -274,13 +366,13 @@ def tuner_info(session):
     except Exception:
         slots = None
     if slots is None:
-        rows.append(("Konfigurierte Tuner", UNAVAILABLE))
+        rows.append((_("Konfigurierte Tuner"), UNAVAILABLE))
     else:
         try:
             slots = list(slots)
         except TypeError:
             slots = []
-        rows.append(("Konfigurierte Tuner", str(len(slots))))
+        rows.append((_("Konfigurierte Tuner"), str(len(slots))))
 
     occupied = set()
     recordings = None
@@ -308,28 +400,28 @@ def tuner_info(session):
         count_source = None
     if recording_count is not None and count_source == "real":
         count_text = str(recording_count)
-        count_label = "Laufende Aufnahmen"
+        count_label = _("Laufende Aufnahmen")
     elif recording_count is not None and count_source == "timer":
         count_text = str(recording_count)
-        count_label = "Aufnahmen (Timer)"
+        count_label = _("Aufnahmen (Timer)")
     elif recordings is not None:
-        count_text = "Nicht unterscheidbar"
-        count_label = "Laufende Aufnahmen"
+        count_text = _("Nicht unterscheidbar")
+        count_label = _("Laufende Aufnahmen")
     else:
         count_text = UNAVAILABLE
-        count_label = "Laufende Aufnahmen"
+        count_label = _("Laufende Aufnahmen")
     rows.append((count_label, count_text))
 
     if slots is not None:
         configured = [(slot, _slot_number(slot, index), _slot_label(slot))
                       for index, slot in enumerate(slots)]
         configured = [(slot, number, label) for slot, number, label in configured if label]
-        rows[0] = ("Tuner-Frontends", str(len(configured)))
+        rows[0] = (_("Tuner-Frontends"), str(len(configured)))
         for slot, number, label in configured:
-            marker = "Aktiv" if number in occupied else "Keine aktive Nutzung erkannt"
+            marker = _("Aktiv") if number in occupied else _("Keine aktive Nutzung erkannt")
             rows.append(("Tuner %d" % number, "%s · %s" % (label, marker)))
     if not occupied and slots is None:
-        rows.append(("Tunerbelegung", UNAVAILABLE))
+        rows.append((_("Tunerbelegung"), UNAVAILABLE))
     elif occupied and slots is None:
-        rows.append(("Belegte Frontends", ", ".join(str(value) for value in sorted(occupied))))
+        rows.append((_("Belegte Frontends"), ", ".join(str(value) for value in sorted(occupied))))
     return rows

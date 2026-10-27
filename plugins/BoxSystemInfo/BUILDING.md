@@ -47,6 +47,8 @@ Zuerst vom Repository-Stamm in den Plugin-Ordner wechseln. `build.sh` ist ein Sh
 ./build.sh
 ```
 
+Beim Paketbau führt `build.sh` außerdem `tools/compile-translations.py` aus. Das Python-3-Skript kompiliert die GNU-gettext-Kataloge (`.po`) zu den mitgelieferten `.mo`-Dateien. Es verwendet nur die Python-Standardbibliothek und benötigt keine zusätzlichen Pakete oder externen Compiler.
+
 Die Tests aus dem Plugin-Stammverzeichnis starten:
 
 ```sh
@@ -60,6 +62,8 @@ Build-Ausgaben vor dem Commit prüfen. Das Git-Repository soll Quellcode, Skript
 OpenPLi und OpenATV sind Ziel-Images; bisher ist nur ein Receiver-/Image-Zielsystem verifiziert. Kein abgeschlossener End-to-End-Build auf einem frischen Mac ist belegt. Aus einem erfolgreichen lokalen Build folgt keine byte-identische Reproduzierbarkeit.
 
 Neue IPKs dürfen erst veröffentlicht werden, wenn der Nutzer genau diese Version selbst auf dem Receiver getestet und ausdrücklich freigegeben hat. Für 0.1.9 liegt diese Bestätigung und Freigabe vor. Agenten- oder CI-Tests genügen dafür nicht.
+
+Version 0.1.10 ist als lokaler Testbuild gebaut und auf dem Receiver installiert; 67 technische Tests sind erfolgreich. Persönlicher Nutzertest und Veröffentlichungsfreigabe stehen noch aus. 0.1.9 bleibt das neueste öffentliche IPK.
 
 ## Paketmetadaten
 
