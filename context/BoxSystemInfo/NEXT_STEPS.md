@@ -1,6 +1,6 @@
 # BoxSystemInfo: Nächste Schritte
 
-0.1.11 ist vom Nutzer erfolgreich getestet und ausdrücklich zur Veröffentlichung freigegeben. 95 technische Tests und Receiver-Prüfung sind erfolgreich. Die unveränderte getestete IPK wird mit Prüfsumme und ausführlichen englischen Release Notes unter `boxsysteminfo-v0.1.11` veröffentlicht; beide READMEs enthalten die vollständige Funktionsliste.
+0.1.11 ist vom Nutzer erfolgreich getestet und ausdrücklich zur Veröffentlichung freigegeben. 95 technische Tests und Receiver-Prüfung sind erfolgreich. Die unveränderte getestete IPK wird mit Prüfsumme und ausführlichen englischen Release Notes unter `boxsysteminfo-v0.1.11` veröffentlicht; beide READMEs zeigen zehn Kernfunktionen und verlinken auf die vollständigen Listen (`FEATURES.md` / `FEATURES.de.md`).
 
 - Bei Fortsetzung `main` und Release-Tag `boxsysteminfo-v0.1.11` prüfen. Weitere IPKs benötigen erneut persönlichen Nutzertest und ausdrückliche Freigabe.
 - Vollständige Quellen, beide READMEs, englischen Changelog und die vier Kontextdateien zusammen aktuell halten.
